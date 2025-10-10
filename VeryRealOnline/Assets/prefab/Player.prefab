@@ -79,11 +79,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   ShowTopMostFoldoutHeaderGroup: 1
   moveSpeed: 10
-  leftKey: 97
-  rightKey: 100
-  upKey: 119
-  downKey: 115
-  message: blaaaa
 --- !u!114 &8899833988399594405
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -209,6 +204,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b989a985b2430e43927045b456cebe3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  ShowTopMostFoldoutHeaderGroup: 1
+  camera: {fileID: 8388049688777869280}
 --- !u!1 &790939626414460321
 GameObject:
   m_ObjectHideFlags: 0

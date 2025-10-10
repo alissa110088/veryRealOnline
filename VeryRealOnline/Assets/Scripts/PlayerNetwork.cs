@@ -16,12 +16,7 @@ public class PlayerNetwork : NetworkBehaviour
     //    }, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
     [SerializeField] private float moveSpeed = 10f;
-    //[SerializeField] private KeyCode leftKey = KeyCode.A;
-    //[SerializeField] private KeyCode rightKey = KeyCode.D;
-    //[SerializeField] private KeyCode upKey = KeyCode.W;
-    //[SerializeField] private KeyCode downKey = KeyCode.S;
-    //[SerializeField] private string message;
-    //[SerializeField] private Rigidbody rb;
+
 
     private Vector3 direction;
     private InputSystem_Actions inputActions;
@@ -46,34 +41,16 @@ public class PlayerNetwork : NetworkBehaviour
         //randomNumber.OnValueChanged += (int previousValue, int newValue) => { Debug.Log(OwnerClientId + " Random Number " + randomNumber.Value); };
     }
 
+    public override void OnNetworkDespawn()
+    {
+        base.OnNetworkDespawn();
+        inputActions.Dispose();
+        inputActions.Disable();
+    }
     private void Update()
     {
         if (!IsOwner)
             return;
-
-        //direction = Vector3.zero;
-
-        //if (Input.GetKey(leftKey))
-        //{
-        //    direction.x = -1f;
-        //}
-        //if (Input.GetKey(rightKey))
-        //{
-        //    direction.x = 1f;
-        //}
-        //if (Input.GetKey(downKey))
-        //{
-        //    direction.z = -1f;
-        //}
-        //if (Input.GetKey(upKey))
-        //{
-        //    direction.z = 1f;
-        //}
-
-        //direction = direction.normalized;
-        
-
-        //transform.localPosition += direction * moveSpeed * Time.deltaTime;
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
