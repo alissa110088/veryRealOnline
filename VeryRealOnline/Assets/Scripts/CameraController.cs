@@ -1,7 +1,8 @@
 using Unity.Mathematics;
+using Unity.Netcode;
 using UnityEngine;
 
-public class CameraController : MonoBehaviour
+public class CameraController : NetworkBehaviour
 {
     private const string xAxis = "Mouse X";
     private const string yAxis = "Mouse Y";
@@ -20,6 +21,7 @@ public class CameraController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if(!IsOwner) return;
         rotation.x += Input.GetAxis(xAxis) * 5f;
         rotation.y += Input.GetAxis(yAxis) * 5f;
         rotation.y = Mathf.Clamp(rotation.y, -88f, 88f);

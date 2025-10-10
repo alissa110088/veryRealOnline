@@ -1,35 +1,47 @@
 using Unity.Collections;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerNetwork : NetworkBehaviour
 {
     NetworkVariable<int> randomNumber = new(1, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
-    NetworkVariable<PlayerData> playerData = new(
-        new PlayerData
-        {
-            life = 100,
-            stunt = false,
-        }, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+    //NetworkVariable<PlayerData> playerData = new(
+    //    new PlayerData
+    //    {
+    //        life = 100,
+    //        stunt = false,
+    //    }, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
     [SerializeField] private float moveSpeed = 10f;
-    [SerializeField] private KeyCode leftKey = KeyCode.A;
-    [SerializeField] private KeyCode rightKey = KeyCode.D;
-    [SerializeField] private KeyCode upKey = KeyCode.W;
-    [SerializeField] private KeyCode downKey = KeyCode.S;
-    [SerializeField] private string message;
+    //[SerializeField] private KeyCode leftKey = KeyCode.A;
+    //[SerializeField] private KeyCode rightKey = KeyCode.D;
+    //[SerializeField] private KeyCode upKey = KeyCode.W;
+    //[SerializeField] private KeyCode downKey = KeyCode.S;
+    //[SerializeField] private string message;
+    //[SerializeField] private Rigidbody rb;
 
     private Vector3 direction;
+    private InputSystem_Actions inputActions;
+    private Vector3 inputDirection;
 
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
 
-        playerData.OnValueChanged += (PlayerData previousValue, PlayerData newValue) =>
-        {
-            Debug.Log(OwnerClientId + " life" + newValue.life + " stunt" + newValue.stunt + " message " + newValue.message);
-        };
+        //playerData.OnValueChanged += (PlayerData previousValue, PlayerData newValue) =>
+        //{
+        //    Debug.Log(OwnerClientId + " life" + newValue.life + " stunt" + newValue.stunt + " message " + newValue.message);
+        //};
+
+        inputActions = new InputSystem_Actions();
+        inputActions.Player.Move.performed += GetDirection;
+        inputActions.Player.Move.canceled += ctx =>  inputDirection = Vector3.zero;
+        inputActions.Player.Enable();
+        Cursor.visible = false;
+
 
         //randomNumber.OnValueChanged += (int previousValue, int newValue) => { Debug.Log(OwnerClientId + " Random Number " + randomNumber.Value); };
     }
@@ -39,28 +51,29 @@ public class PlayerNetwork : NetworkBehaviour
         if (!IsOwner)
             return;
 
-        direction = Vector3.zero;
+        //direction = Vector3.zero;
 
-        if (Input.GetKey(leftKey))
-        {
-            direction.x = -1f;
-        }
-        if (Input.GetKey(rightKey))
-        {
-            direction.x = 1f;
-        }
-        if (Input.GetKey(downKey))
-        {
-            direction.z = -1f;
-        }
-        if (Input.GetKey(upKey))
-        {
-            direction.z = 1f;
-        }
+        //if (Input.GetKey(leftKey))
+        //{
+        //    direction.x = -1f;
+        //}
+        //if (Input.GetKey(rightKey))
+        //{
+        //    direction.x = 1f;
+        //}
+        //if (Input.GetKey(downKey))
+        //{
+        //    direction.z = -1f;
+        //}
+        //if (Input.GetKey(upKey))
+        //{
+        //    direction.z = 1f;
+        //}
 
-        direction = direction.normalized;
+        //direction = direction.normalized;
+        
 
-        transform.position += direction * moveSpeed * Time.deltaTime;
+        //transform.localPosition += direction * moveSpeed * Time.deltaTime;
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -74,29 +87,47 @@ public class PlayerNetwork : NetworkBehaviour
             //};
 
 
-            TestRpc(new RpcParams());
+            //TestRpc(new RpcParams());
         }
     }
 
-
-    [Rpc(SendTo.NotServer)]
-    void TestRpc(RpcParams rpcParams)
+    private void FixedUpdate()
     {
-        Debug.Log("TestRpc " + OwnerClientId + "rpc Params: " + rpcParams.Receive.SenderClientId);
+        if (!IsOwner) return;
+
+        direction = transform.forward * inputDirection.z + transform.right * inputDirection.x;
+        Debug.Log(direction * moveSpeed);
+        transform.position += direction * moveSpeed *Time.fixedDeltaTime;
     }
+
+    private void GetDirection(InputAction.CallbackContext ctx)
+    {
+        if(!IsOwner)
+            return;
+
+        inputDirection = ctx.ReadValue<Vector2>();
+        inputDirection = new Vector3(inputDirection.x, 0f, inputDirection.y);
+        inputDirection = inputDirection.normalized;
+    }
+
+    //[Rpc(SendTo.NotServer)]
+    //void TestRpc(RpcParams rpcParams)
+    //{
+    //    Debug.Log("TestRpc " + OwnerClientId + "rpc Params: " + rpcParams.Receive.SenderClientId);
+    //}
 
 }
 
-public struct PlayerData : INetworkSerializable
-{
-    public int life;
-    public bool stunt;
-    public FixedString128Bytes message;
+//public struct PlayerData : INetworkSerializable
+//{
+//    public int life;
+//    public bool stunt;
+//    public FixedString128Bytes message;
 
-    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
-    {
-        serializer.SerializeValue(ref life);
-        serializer.SerializeValue(ref stunt);
-        serializer.SerializeValue(ref message);
-    }
-}
+//    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+//    {
+//        serializer.SerializeValue(ref life);
+//        serializer.SerializeValue(ref stunt);
+//        serializer.SerializeValue(ref message);
+//    }
+//}
