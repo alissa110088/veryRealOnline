@@ -36,8 +36,10 @@ public class PlayerNetwork : NetworkBehaviour
         if (!IsOwner) return;
 
         direction = transform.forward * inputDirection.z + transform.right * inputDirection.x;
-        Debug.Log(direction * moveSpeed * Time.fixedDeltaTime);
         rb.AddForce(direction * moveSpeed);
+        rb.linearVelocity = Vector3.ClampMagnitude(rb.linearVelocity, 10f);
+        Debug.Log(rb.linearVelocity);
+
     }
 
     private void GetDirection(InputAction.CallbackContext ctx)
