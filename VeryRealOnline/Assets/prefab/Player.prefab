@@ -79,6 +79,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   ShowTopMostFoldoutHeaderGroup: 1
   moveSpeed: 10
+  rb: {fileID: 4013627882963081048}
 --- !u!114 &8899833988399594405
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -206,6 +207,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   ShowTopMostFoldoutHeaderGroup: 1
   camera: {fileID: 8388049688777869280}
+  sensibilityX: 10
+  sensibilityY: 5
+  maxUpCamera: 90
+  minDownCamera: -90
 --- !u!1 &790939626414460321
 GameObject:
   m_ObjectHideFlags: 0
@@ -347,13 +352,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8662285270590012633}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.20406038, y: 0, z: 0, w: 0.97895837}
-  m_LocalPosition: {x: 0.048, y: 1.4850197, z: -1.893}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.048, y: 0.649, z: 0.025}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4293947211087578549}
-  m_LocalEulerAnglesHint: {x: 23.549, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &8388049688777869280
 Camera:
   m_ObjectHideFlags: 0
