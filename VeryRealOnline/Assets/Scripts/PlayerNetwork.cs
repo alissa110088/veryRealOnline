@@ -17,6 +17,7 @@ public class PlayerNetwork : NetworkBehaviour
     private Vector3 inputDirection;
 
     private bool isGrounded;
+    private bool shouldJump;
 
     private const string groundLayerName = "Ground";
     private const string ObstacleLayerName = "Obstacle";
@@ -28,7 +29,8 @@ public class PlayerNetwork : NetworkBehaviour
         inputActions = new InputSystem_Actions();
         inputActions.Player.Move.performed += GetDirection;
         inputActions.Player.Move.canceled += ctx =>  inputDirection = Vector3.zero;
-        inputActions.Player.Jump.performed += Jump;
+        inputActions.Player.Jump.performed += ctx => shouldJump = true;
+        inputActions.Player.Jump.canceled += ctx => shouldJump = false;
         inputActions.Player.Enable();
 
         Cursor.visible = false;
@@ -46,8 +48,6 @@ public class PlayerNetwork : NetworkBehaviour
     {
         if (!IsOwner) return;
 
-        Debug.Log(rb.linearVelocity);
-
         direction = transform.forward * inputDirection.z + transform.right * inputDirection.x;
 
         //TODO ne marche pas a regler
@@ -57,6 +57,8 @@ public class PlayerNetwork : NetworkBehaviour
             Vector3 push = Vector3.Cross(hit.normal, Vector3.up);
             rb.position += push * 0.01f;
         }
+
+        Jump();
 
         if (isGrounded)
         {
@@ -110,10 +112,11 @@ public class PlayerNetwork : NetworkBehaviour
         inputDirection = inputDirection.normalized;
     }
 
-    private void Jump(InputAction.CallbackContext ctx)
+    private void Jump()
     {
         if(!IsOwner) return;
-        if (isGrounded)
+
+        if (isGrounded && shouldJump)
         {
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
