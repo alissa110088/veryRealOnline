@@ -10,12 +10,14 @@ GameObject:
   m_Component:
   - component: {fileID: 4293947211087578549}
   - component: {fileID: 2121985185363650199}
-  - component: {fileID: 1352528031009393372}
   - component: {fileID: 8899833988399594405}
   - component: {fileID: 4013627882963081048}
   - component: {fileID: 1669595290560693632}
   - component: {fileID: 6025706224683201965}
+  - component: {fileID: 1352528031009393372}
   - component: {fileID: 4271655008237625298}
+  - component: {fileID: 2857883058575590491}
+  - component: {fileID: 2427758386668595172}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -66,23 +68,6 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
---- !u!114 &1352528031009393372
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8028344034713872}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6cbae13b1b865254492c85fa3f412da4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  ShowTopMostFoldoutHeaderGroup: 1
-  moveSpeed: 10
-  rb: {fileID: 4013627882963081048}
-  airControlMultiplier: 0.3
-  jumpForce: 7
 --- !u!114 &8899833988399594405
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -196,6 +181,23 @@ CapsuleCollider:
   m_Height: 1
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1352528031009393372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8028344034713872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cbae13b1b865254492c85fa3f412da4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  ShowTopMostFoldoutHeaderGroup: 1
+  moveSpeed: 10
+  rb: {fileID: 4013627882963081048}
+  airControlMultiplier: 0.3
+  jumpForce: 7
 --- !u!114 &4271655008237625298
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -214,6 +216,35 @@ MonoBehaviour:
   sensibilityY: 5
   maxUpCamera: 90
   minDownCamera: -90
+--- !u!114 &2857883058575590491
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8028344034713872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8460c639912610d40b212f97474cf263, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerRole
+  playerRole: 1
+--- !u!114 &2427758386668595172
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8028344034713872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf4bcb48790a8574ab55c248e151d933, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Hider
+  ShowTopMostFoldoutHeaderGroup: 1
+  objectLayer:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1 &790939626414460321
 GameObject:
   m_ObjectHideFlags: 0
@@ -373,7 +404,7 @@ GameObject:
   - component: {fileID: 7496159573495249031}
   m_Layer: 0
   m_Name: CameraPlayer
-  m_TagString: Untagged
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
