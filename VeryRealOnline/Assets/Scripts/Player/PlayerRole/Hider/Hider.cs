@@ -6,9 +6,9 @@ public class Hider : NetworkBehaviour
 {
     [SerializeField] private LayerMask objectLayer;
     [SerializeField] private float distanceToGrab = 5f;
-    [SerializeField] private float howCloseUISpawn = .3f;
-    [SerializeField] private float howHighUiSpawn = .5f;
     [SerializeField] private float SmoothMovementFourniture = 15f;
+    [SerializeField] private float howCloseUISpawn = .6f;
+    [SerializeField] private float howHighUiSpawn = .5f;
 
     private InputSystem_Actions inputActions;
     private GameObject objectInHand = null;
@@ -97,7 +97,7 @@ public class Hider : NetworkBehaviour
 
         objectNetwork.RemoveOwnership();
         rbObject.useGravity = true;
-        ActionManager.grab.Invoke();
+        ActionManager.release.Invoke();
         objectInHand = null;
     }
 

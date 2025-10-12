@@ -9,6 +9,12 @@ public class Fourniture : MonoBehaviour
     private void OnEnable()
     {
         ActionManager.grab += OnGrabbed;
+        ActionManager.release += Release;
+    }
+    private void OnDisable()
+    {
+        ActionManager.grab -= OnGrabbed;
+        ActionManager.release -= Release;
     }
 
     private void Update()
@@ -18,16 +24,16 @@ public class Fourniture : MonoBehaviour
 
     private void OnGrabbed()
     {
-        if (!isGrabbed)
-        {
-            rb.linearVelocity = Vector3.zero;
-            isGrabbed = true;
-            rb.useGravity = false;
-        }
-        else
-        {
-            isGrabbed = false;
-            rb.useGravity = true;
-        }
+
+        rb.linearVelocity = Vector3.zero;
+        isGrabbed = true;
+        rb.useGravity = false;
+
+    }
+
+    private void Release()
+    {
+        isGrabbed = false;
+        rb.useGravity = true;
     }
 }

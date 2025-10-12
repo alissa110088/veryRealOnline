@@ -5,6 +5,8 @@ public class InteractionUIScript : MonoBehaviour
 {
     [SerializeField] private Image image;
     [SerializeField] private GameObject Furniture;
+    [SerializeField] private float howCloseUISpawn = .6f;
+    [SerializeField] private float howHighUiSpawn = .5f;
 
     private Camera camera;
     private bool shouldFollowPlayer;
@@ -26,7 +28,7 @@ public class InteractionUIScript : MonoBehaviour
             Quaternion rotation = camera.transform.rotation;
             transform.LookAt(transform.position + rotation * Vector3.forward, rotation * Vector3.up);
             Vector3 directionToCamera = (camera.transform.position - transform.position).normalized;
-            Vector3 lPosition = transform.position + directionToCamera * .3f + transform.up * .5f;
+            Vector3 lPosition = transform.position + directionToCamera * howCloseUISpawn + transform.up * howHighUiSpawn;
 
             transform.position = lPosition; 
 
