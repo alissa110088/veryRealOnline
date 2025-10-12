@@ -16,6 +16,8 @@ public class Hider : NetworkBehaviour
     private bool canGrabItem;
     private bool callOneTimeUi;
     private RaycastHit hit;
+    private Rigidbody rbObject;
+    private NetworkObject objectNetwork;
 
 
     public override void OnNetworkSpawn()
@@ -80,6 +82,11 @@ public class Hider : NetworkBehaviour
 
             grabDistance = Vector3.Distance(Camera.main.transform.position, hit.point);
             objectInHand = hit.transform.gameObject;
+            rbObject = objectInHand.GetComponent<Rigidbody>();
+            objectNetwork = objectInHand.GetComponent<NetworkObject>();
+            RequestOwnershipServerRpc(objectNetwork.NetworkObjectId, NetworkManager.Singleton.LocalClientId);
+
+
         }
 
     }
@@ -88,8 +95,10 @@ public class Hider : NetworkBehaviour
     {
         if (!IsOwner && objectInHand == null) return;
 
-        objectInHand = null;
+        objectNetwork.RemoveOwnership();
+        rbObject.useGravity = true;
         ActionManager.grab.Invoke();
+        objectInHand = null;
     }
 
     private void MoveFurniture()
@@ -97,11 +106,20 @@ public class Hider : NetworkBehaviour
         Ray raycastToMouse = Camera.main.ScreenPointToRay(Input.mousePosition);
         Vector3 pos = raycastToMouse.origin + raycastToMouse.direction * grabDistance;
 
-        objectInHand.transform.position = Vector3.Lerp(
-          objectInHand.transform.position,
-          pos,
-          Time.deltaTime * SmoothMovementFourniture
-      );
+        rbObject.MovePosition(Vector3.Lerp(
+        objectInHand.transform.position,
+        pos,
+        Time.deltaTime * SmoothMovementFourniture));
     }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void RequestOwnershipServerRpc(ulong objectId, ulong requestingClientId)
+    {
+        if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(objectId, out NetworkObject netObj))
+        {
+            netObj.ChangeOwnership(requestingClientId);
+        }
+    }
+
 
 }

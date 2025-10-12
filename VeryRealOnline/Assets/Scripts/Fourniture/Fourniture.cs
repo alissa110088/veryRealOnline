@@ -11,6 +11,11 @@ public class Fourniture : MonoBehaviour
         ActionManager.grab += OnGrabbed;
     }
 
+    private void Update()
+    {
+        Debug.Log(isGrabbed);
+    }
+
     private void OnGrabbed()
     {
         if (!isGrabbed)
