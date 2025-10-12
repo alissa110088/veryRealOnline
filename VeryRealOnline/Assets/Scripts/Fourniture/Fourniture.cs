@@ -5,6 +5,7 @@ public class Fourniture : MonoBehaviour
     [SerializeField] private Rigidbody rb;
 
     private bool isGrabbed;
+
     private void OnEnable()
     {
         ActionManager.grab += OnGrabbed;

@@ -13,6 +13,9 @@ public class Hider : NetworkBehaviour
     private InputSystem_Actions inputActions;
     private GameObject objectInHand = null;
     private float grabDistance;
+    private bool canGrabItem;
+    private bool callOneTimeUi;
+    private RaycastHit hit;
 
 
     public override void OnNetworkSpawn()
@@ -35,33 +38,56 @@ public class Hider : NetworkBehaviour
 
     private void Update()
     {
-        if (!IsOwner || objectInHand == null) return;
+        if (!IsOwner) return;
 
-        MoveFurniture();
+        if (objectInHand != null)
+        {
+            MoveFurniture();
+
+        }
+
+        if (objectInHand == null)
+        {
+            if (Physics.Raycast(transform.position, transform.forward, out hit, distanceToGrab, objectLayer))
+            {
+                Vector3 lPosition = hit.point - (Camera.main.transform.forward * howCloseUISpawn - transform.up * howHighUiSpawn);
+                ActionManager.spawnUi.Invoke(hit.transform.gameObject, lPosition, Camera.main);
+
+                if (!callOneTimeUi)
+                {
+                    callOneTimeUi = true;
+                }
+                canGrabItem = true;
+            }
+            else
+            {
+                canGrabItem = false;
+                callOneTimeUi = true;
+                ActionManager.despawnUi.Invoke();
+            }
+        }
 
     }
 
     private void GetFurniture(InputAction.CallbackContext ctx)
     {
-        if(!IsOwner) return;
+        if (!IsOwner) return;
 
-        RaycastHit hit;
-
-        if (Physics.Raycast(transform.position, transform.forward, out hit, distanceToGrab, objectLayer))
+        if (canGrabItem)
         {
-            Vector3 lPosition = hit.point - (Camera.main.transform.forward * howCloseUISpawn - transform.up * howHighUiSpawn);
-            ActionManager.spawnUi.Invoke(hit.transform.gameObject, lPosition);
             ActionManager.grab.Invoke();
+            ActionManager.despawnUi.Invoke();
 
             grabDistance = Vector3.Distance(Camera.main.transform.position, hit.point);
             objectInHand = hit.transform.gameObject;
         }
+
     }
 
     private void LetGo()
     {
-        if (!IsOwner || objectInHand == null) return;
-        
+        if (!IsOwner && objectInHand == null) return;
+
         objectInHand = null;
         ActionManager.grab.Invoke();
     }

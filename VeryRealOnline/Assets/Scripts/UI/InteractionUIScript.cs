@@ -7,10 +7,12 @@ public class InteractionUIScript : MonoBehaviour
     [SerializeField] private GameObject Furniture;
 
     private Camera camera;
+    private bool shouldFollowPlayer;
 
     private void OnEnable()
     {
         ActionManager.spawnUi += SpawnImage;
+        ActionManager.despawnUi += DespawnImage;
     }
 
     void Start()
@@ -19,18 +21,38 @@ public class InteractionUIScript : MonoBehaviour
 
     private void LateUpdate()
     {
-        camera = Camera.main;
+        if (shouldFollowPlayer)
+        {
+            Quaternion rotation = camera.transform.rotation;
+            transform.LookAt(transform.position + rotation * Vector3.forward, rotation * Vector3.up);
+            Vector3 directionToCamera = (camera.transform.position - transform.position).normalized;
+            Vector3 lPosition = transform.position + directionToCamera * .3f + transform.up * .5f;
 
-        Quaternion rotation = camera.transform.rotation;
-        transform.LookAt(transform.position + rotation * Vector3.forward, rotation * Vector3.up);
+            transform.position = lPosition; 
+
+        }
     }
 
-    private void SpawnImage(GameObject pFurniture, Vector3 SpawnPoint)
+    private void SpawnImage(GameObject pFurniture, Vector3 SpawnPoint, Camera cam)
     {
         if(Furniture != pFurniture)
             return;
 
         image.enabled = true;
         transform.position = SpawnPoint;
+        camera = cam;
+        shouldFollowPlayer = true;
+    }
+
+    private void DespawnImage()
+    {
+        image.enabled = false;
+        shouldFollowPlayer = false;
+    }
+
+    private void OnDisable()
+    {
+        ActionManager.spawnUi -= SpawnImage;
+        ActionManager.despawnUi -= DespawnImage;
     }
 }
