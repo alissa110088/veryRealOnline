@@ -7,8 +7,6 @@ public class Hider : NetworkBehaviour
     [SerializeField] private LayerMask objectLayer;
     [SerializeField] private float distanceToGrab = 5f;
     [SerializeField] private float SmoothMovementFourniture = 15f;
-    [SerializeField] private float howCloseUISpawn = .6f;
-    [SerializeField] private float howHighUiSpawn = .5f;
 
     private InputSystem_Actions inputActions;
     private GameObject objectInHand = null;
@@ -52,8 +50,7 @@ public class Hider : NetworkBehaviour
         {
             if (Physics.Raycast(transform.position, transform.forward, out hit, distanceToGrab, objectLayer))
             {
-                Vector3 lPosition = hit.point - (Camera.main.transform.forward * howCloseUISpawn - transform.up * howHighUiSpawn);
-                ActionManager.spawnUi.Invoke(hit.transform.gameObject, lPosition, Camera.main);
+                ActionManager.spawnUi.Invoke(hit.transform.gameObject, hit.point, Camera.main);
 
                 if (!callOneTimeUi)
                 {
