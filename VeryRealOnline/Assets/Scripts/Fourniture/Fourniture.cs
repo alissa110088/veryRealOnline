@@ -17,11 +17,6 @@ public class Fourniture : MonoBehaviour
         ActionManager.release -= Release;
     }
 
-    private void Update()
-    {
-        Debug.Log(isGrabbed);
-    }
-
     private void OnGrabbed()
     {
 

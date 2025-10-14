@@ -17,10 +17,6 @@ public class InteractionUIScript : MonoBehaviour
         ActionManager.despawnUi += DespawnImage;
     }
 
-    void Start()
-    {
-    }
-
     private void LateUpdate()
     {
         if (shouldFollowPlayer)
@@ -31,7 +27,6 @@ public class InteractionUIScript : MonoBehaviour
             Vector3 lPosition = transform.position + directionToCamera * howCloseUISpawn + transform.up * howHighUiSpawn;
 
             transform.position = lPosition; 
-
         }
     }
 
@@ -40,15 +35,17 @@ public class InteractionUIScript : MonoBehaviour
         if(Furniture != pFurniture)
             return;
 
-        image.enabled = true;
+        image.gameObject.SetActive(true);
         transform.position = SpawnPoint;
         camera = cam;
         shouldFollowPlayer = true;
     }
 
-    private void DespawnImage()
+    private void DespawnImage(GameObject focusedObject )
     {
-        image.enabled = false;
+        if (Furniture != focusedObject)
+            return;
+        image.gameObject.SetActive(false);
         shouldFollowPlayer = false;
     }
 

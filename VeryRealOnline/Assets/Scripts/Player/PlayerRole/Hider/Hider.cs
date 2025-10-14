@@ -16,6 +16,7 @@ public class Hider : NetworkBehaviour
     private RaycastHit hit;
     private Rigidbody rbObject;
     private NetworkObject objectNetwork;
+    private GameObject focusedObject;
 
 
     public override void OnNetworkSpawn()
@@ -51,18 +52,18 @@ public class Hider : NetworkBehaviour
             if (Physics.Raycast(transform.position, transform.forward, out hit, distanceToGrab, objectLayer))
             {
                 ActionManager.spawnUi.Invoke(hit.transform.gameObject, hit.point, Camera.main);
-
-                if (!callOneTimeUi)
-                {
-                    callOneTimeUi = true;
-                }
+                focusedObject = hit.transform.gameObject;
                 canGrabItem = true;
             }
             else
             {
                 canGrabItem = false;
-                callOneTimeUi = true;
-                ActionManager.despawnUi.Invoke();
+                if(focusedObject != null)
+                {
+                    ActionManager.despawnUi.Invoke(focusedObject);
+                    return;
+
+                }
             }
         }
 
@@ -75,7 +76,8 @@ public class Hider : NetworkBehaviour
         if (canGrabItem)
         {
             ActionManager.grab.Invoke();
-            ActionManager.despawnUi.Invoke();
+            ActionManager.despawnUi.Invoke(focusedObject);
+            focusedObject = null;
 
             grabDistance = Vector3.Distance(Camera.main.transform.position, hit.point);
             objectInHand = hit.transform.gameObject;

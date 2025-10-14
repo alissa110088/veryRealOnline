@@ -15,7 +15,7 @@ public class CameraController : NetworkBehaviour
 
     private Vector2 rotation = Vector2.zero;
 
-    private void FixedUpdate()
+    private void LateUpdate()
     {
         if(!IsOwner) return;
         rotation.x += Input.GetAxis(xAxis) * sensibilityX;
