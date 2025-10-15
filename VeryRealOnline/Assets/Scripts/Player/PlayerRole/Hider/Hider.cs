@@ -12,7 +12,6 @@ public class Hider : NetworkBehaviour
     private GameObject objectInHand = null;
     private float grabDistance;
     private bool canGrabItem;
-    private bool callOneTimeUi;
     private RaycastHit hit;
     private Rigidbody rbObject;
     private NetworkObject objectNetwork;
@@ -57,12 +56,10 @@ public class Hider : NetworkBehaviour
             }
             else
             {
-                canGrabItem = false;
-                if(focusedObject != null)
+                if (focusedObject != null)
                 {
                     ActionManager.despawnUi.Invoke(focusedObject);
                     return;
-
                 }
             }
         }

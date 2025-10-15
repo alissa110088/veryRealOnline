@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 1352528031009393372}
   - component: {fileID: 4271655008237625298}
   - component: {fileID: 2857883058575590491}
-  - component: {fileID: 5964081146710408786}
+  - component: {fileID: 6882830279869512184}
   m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
@@ -56,7 +56,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1978953931
+  GlobalObjectIdHash: 676757414
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -197,7 +197,6 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   moveSpeed: 10
   rb: {fileID: 4013627882963081048}
-  airControlMultiplier: 0.3
   jumpForce: 7
 --- !u!114 &4271655008237625298
 MonoBehaviour:
@@ -230,7 +229,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerRole
   playerRole: 1
---- !u!114 &5964081146710408786
+--- !u!114 &6882830279869512184
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -239,15 +238,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 8028344034713872}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf4bcb48790a8574ab55c248e151d933, type: 3}
+  m_Script: {fileID: 11500000, guid: 1ec1e457545693f48a7b677d17b9b990, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Hider
-  ShowTopMostFoldoutHeaderGroup: 1
-  objectLayer:
+  m_EditorClassIdentifier: Assembly-CSharp::Seeker
+  playerLayer:
     serializedVersion: 2
-    m_Bits: 64
-  distanceToGrab: 5
-  SmoothMovementFourniture: 15
+    m_Bits: 128
 --- !u!1 &790939626414460321
 GameObject:
   m_ObjectHideFlags: 0
@@ -409,7 +405,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3697879498135566948
 RectTransform:
   m_ObjectHideFlags: 0
@@ -583,7 +579,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InteractionUIScript
   image: {fileID: 2582656095691402445}
-  Furniture: {fileID: 8028344034713872}
+  furniture: {fileID: 8028344034713872}
   howCloseUISpawn: 0.6
   howHighUiSpawn: 0.5
 --- !u!1 &8662285270590012633

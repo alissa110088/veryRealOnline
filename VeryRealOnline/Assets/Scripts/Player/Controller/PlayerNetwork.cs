@@ -9,7 +9,6 @@ public class PlayerNetwork : NetworkBehaviour
 {
     [SerializeField] private float moveSpeed = 10f;
     [SerializeField] private Rigidbody rb;
-    [SerializeField] private float airControlMultiplier = 0.3f;
     [SerializeField] private float jumpForce = 5f;
 
     private Vector3 direction;

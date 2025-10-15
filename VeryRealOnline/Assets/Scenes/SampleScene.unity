@@ -497,6 +497,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 358888177}
   m_CullTransparentMesh: 1
+--- !u!1 &366118254 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2954239221683951665, guid: c9bff505f66dd874695e3bd6d51bebb7, type: 3}
+  m_PrefabInstance: {fileID: 1215788711}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -1250,6 +1255,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: furniture (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 4909908238501642618, guid: c9bff505f66dd874695e3bd6d51bebb7, type: 3}
+      propertyPath: furniture
+      value: 
+      objectReference: {fileID: 366118254}
     - target: {fileID: 6156675490624523306, guid: c9bff505f66dd874695e3bd6d51bebb7, type: 3}
       propertyPath: GlobalObjectIdHash
       value: 303102875
@@ -1424,6 +1433,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1547160941}
   m_CullTransparentMesh: 1
+--- !u!1 &1646253640 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2954239221683951665, guid: c9bff505f66dd874695e3bd6d51bebb7, type: 3}
+  m_PrefabInstance: {fileID: 1409802674967732649}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1762161117
 GameObject:
   m_ObjectHideFlags: 0
@@ -1775,6 +1789,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: furniture
       objectReference: {fileID: 0}
+    - target: {fileID: 4909908238501642618, guid: c9bff505f66dd874695e3bd6d51bebb7, type: 3}
+      propertyPath: furniture
+      value: 
+      objectReference: {fileID: 1646253640}
     - target: {fileID: 6156675490624523306, guid: c9bff505f66dd874695e3bd6d51bebb7, type: 3}
       propertyPath: GlobalObjectIdHash
       value: 1768846284

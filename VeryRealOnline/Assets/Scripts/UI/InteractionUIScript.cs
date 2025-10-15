@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class InteractionUIScript : MonoBehaviour
 {
     [SerializeField] private Image image;
-    [SerializeField] private GameObject Furniture;
+    [SerializeField] private GameObject furniture;
     [SerializeField] private float howCloseUISpawn = .6f;
     [SerializeField] private float howHighUiSpawn = .5f;
 
@@ -26,25 +26,30 @@ public class InteractionUIScript : MonoBehaviour
             Vector3 directionToCamera = (camera.transform.position - transform.position).normalized;
             Vector3 lPosition = transform.position + directionToCamera * howCloseUISpawn + transform.up * howHighUiSpawn;
 
-            transform.position = lPosition; 
+            transform.position = lPosition;
         }
     }
 
     private void SpawnImage(GameObject pFurniture, Vector3 SpawnPoint, Camera cam)
     {
-        if(Furniture != pFurniture)
+        if (furniture != pFurniture)
             return;
 
-        image.gameObject.SetActive(true);
+        if (!image.gameObject.activeInHierarchy)
+            image.gameObject.SetActive(true);
+
+        Debug.Log("Spawn");
         transform.position = SpawnPoint;
         camera = cam;
         shouldFollowPlayer = true;
     }
 
-    private void DespawnImage(GameObject focusedObject )
+    private void DespawnImage(GameObject focusedObject)
     {
-        if (Furniture != focusedObject)
+        if (furniture != focusedObject)
             return;
+
+        Debug.Log("despawn");
         image.gameObject.SetActive(false);
         shouldFollowPlayer = false;
     }
