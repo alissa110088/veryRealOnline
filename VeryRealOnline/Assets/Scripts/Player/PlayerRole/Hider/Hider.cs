@@ -4,10 +4,10 @@ using UnityEngine.InputSystem;
 
 public class Hider : NetworkBehaviour
 {
-    [SerializeField] private LayerMask objectLayer;
-    [SerializeField] private float distanceToGrab = 5f;
-    [SerializeField] private float SmoothMovementFourniture = 15f;
-
+    //[SerializeField] private LayerMask objectLayer;
+    private float distanceToGrab = 5f;
+    private float SmoothMovementFourniture = 15f;
+    private LayerMask objectLayer;
     private InputSystem_Actions inputActions;
     private GameObject objectInHand = null;
     private float grabDistance;
@@ -21,6 +21,9 @@ public class Hider : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
+
+        objectLayer = LayerMask.GetMask("Obstacle");
+
 
         inputActions = new InputSystem_Actions();
 
@@ -38,6 +41,8 @@ public class Hider : NetworkBehaviour
 
     private void Update()
     {
+
+
         if (!IsOwner) return;
 
         if (objectInHand != null)
@@ -45,6 +50,7 @@ public class Hider : NetworkBehaviour
             MoveFurniture();
 
         }
+
 
         if (objectInHand == null)
         {
@@ -77,12 +83,11 @@ public class Hider : NetworkBehaviour
             focusedObject = null;
 
             grabDistance = Vector3.Distance(Camera.main.transform.position, hit.point);
+            Debug.Log(hit.transform.gameObject);
             objectInHand = hit.transform.gameObject;
             rbObject = objectInHand.GetComponent<Rigidbody>();
             objectNetwork = objectInHand.GetComponent<NetworkObject>();
             RequestOwnershipServerRpc(objectNetwork.NetworkObjectId, NetworkManager.Singleton.LocalClientId);
-
-
         }
 
     }

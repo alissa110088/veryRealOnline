@@ -38,7 +38,6 @@ public class InteractionUIScript : MonoBehaviour
         if (!image.gameObject.activeInHierarchy)
             image.gameObject.SetActive(true);
 
-        Debug.Log("Spawn");
         transform.position = SpawnPoint;
         camera = cam;
         shouldFollowPlayer = true;
@@ -49,7 +48,6 @@ public class InteractionUIScript : MonoBehaviour
         if (furniture != focusedObject)
             return;
 
-        Debug.Log("despawn");
         image.gameObject.SetActive(false);
         shouldFollowPlayer = false;
     }

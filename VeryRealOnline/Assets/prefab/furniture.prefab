@@ -436,6 +436,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InteractionUIScript
   image: {fileID: 2169339452257200533}
-  Furniture: {fileID: 2954239221683951665}
+  furniture: {fileID: 0}
   howCloseUISpawn: 0.6
   howHighUiSpawn: 0.5

@@ -2,6 +2,6 @@ using UnityEngine;
 
 public enum EnumPlayerState
 {
-    Seeker,
+    seeker,
     hider
 }

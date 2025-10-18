@@ -17,6 +17,7 @@ public class PlayerNetwork : NetworkBehaviour
 
     private bool isGrounded;
     private bool shouldJump;
+    private bool first;
 
     private const string groundLayerName = "Ground";
     private const string ObstacleLayerName = "Obstacle";
@@ -25,9 +26,18 @@ public class PlayerNetwork : NetworkBehaviour
     {
         base.OnNetworkSpawn();
 
+        StartCoroutine(RegisterPlayerNextFrame());
+
+    }
+
+    private void OnEnable()
+    {
+        if (!first)
+            return;
+
         inputActions = new InputSystem_Actions();
         inputActions.Player.Move.performed += GetDirection;
-        inputActions.Player.Move.canceled += ctx =>  inputDirection = Vector3.zero;
+        inputActions.Player.Move.canceled += ctx => inputDirection = Vector3.zero;
         inputActions.Player.Jump.performed += ctx => shouldJump = true;
         inputActions.Player.Jump.canceled += ctx => shouldJump = false;
         inputActions.Player.Enable();
@@ -36,11 +46,21 @@ public class PlayerNetwork : NetworkBehaviour
         Cursor.lockState = CursorLockMode.Locked;
     }
 
+    private void OnDisable()
+    {
+        if (!first)
+        {
+            first = true;
+            return;
+        }
+
+        inputActions.Dispose();
+        inputActions.Disable();
+    }
     public override void OnNetworkDespawn()
     {
         base.OnNetworkDespawn();
-        inputActions.Dispose();
-        inputActions.Disable();
+
     }
 
     private void FixedUpdate()
@@ -51,7 +71,7 @@ public class PlayerNetwork : NetworkBehaviour
 
         //TODO ne marche pas a regler
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, direction.normalized,out hit, 1f))
+        if (Physics.Raycast(transform.position, direction.normalized, out hit, 1f))
         {
             Vector3 push = Vector3.Cross(hit.normal, Vector3.up);
             rb.position += push * 0.01f;
@@ -80,12 +100,16 @@ public class PlayerNetwork : NetworkBehaviour
         rb.linearVelocity = new Vector3(horizontal.x, rb.linearVelocity.y, horizontal.z);
     }
 
-
+    private IEnumerator RegisterPlayerNextFrame()
+    {
+        yield return null;
+        ActionManager.addPlayer?.Invoke(this);
+    }
     private void OnCollisionEnter(Collision collision)
     {
-        if(!IsOwner) return;
+        if (!IsOwner) return;
 
-        if(collision.gameObject.layer == LayerMask.NameToLayer(groundLayerName) && !isGrounded)
+        if (collision.gameObject.layer == LayerMask.NameToLayer(groundLayerName) && !isGrounded)
         {
             isGrounded = true;
         }
@@ -93,7 +117,7 @@ public class PlayerNetwork : NetworkBehaviour
 
     private void OnCollisionExit(Collision collision)
     {
-        if(!IsOwner) return;
+        if (!IsOwner) return;
 
         if (collision.gameObject.layer == LayerMask.NameToLayer(groundLayerName) && isGrounded)
         {
@@ -103,7 +127,7 @@ public class PlayerNetwork : NetworkBehaviour
 
     private void GetDirection(InputAction.CallbackContext ctx)
     {
-        if(!IsOwner)
+        if (!IsOwner)
             return;
 
         inputDirection = ctx.ReadValue<Vector2>();
@@ -113,7 +137,7 @@ public class PlayerNetwork : NetworkBehaviour
 
     private void Jump()
     {
-        if(!IsOwner) return;
+        if (!IsOwner) return;
 
         if (isGrounded && shouldJump)
         {

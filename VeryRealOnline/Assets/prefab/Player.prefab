@@ -17,7 +17,8 @@ GameObject:
   - component: {fileID: 1352528031009393372}
   - component: {fileID: 4271655008237625298}
   - component: {fileID: 2857883058575590491}
-  - component: {fileID: 6882830279869512184}
+  - component: {fileID: 4561301352292425346}
+  - component: {fileID: 8420016430571025698}
   m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
@@ -229,21 +230,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerRole
   playerRole: 1
---- !u!114 &6882830279869512184
+  hiderScript: {fileID: 4561301352292425346}
+  seekerScript: {fileID: 8420016430571025698}
+--- !u!114 &4561301352292425346
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8028344034713872}
-  m_Enabled: 1
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf4bcb48790a8574ab55c248e151d933, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Hider
+  ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &8420016430571025698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8028344034713872}
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1ec1e457545693f48a7b677d17b9b990, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Seeker
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 128
 --- !u!1 &790939626414460321
 GameObject:
   m_ObjectHideFlags: 0

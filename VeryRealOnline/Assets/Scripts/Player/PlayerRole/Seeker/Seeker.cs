@@ -2,10 +2,15 @@ using UnityEngine;
 
 public class Seeker : MonoBehaviour
 {
-    [SerializeField] private LayerMask playerLayer;
+    //[SerializeField] private LayerMask playerLayer;
 
+    private LayerMask playerLayer;
     private GameObject focusedObject;
 
+    private void OnEnable()
+    {
+        playerLayer = LayerMask.NameToLayer("Player");
+    }
     private void Update()
     {
 
