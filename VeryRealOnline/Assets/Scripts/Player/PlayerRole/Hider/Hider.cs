@@ -65,6 +65,7 @@ public class Hider : NetworkBehaviour
                 if (focusedObject != null)
                 {
                     ActionManager.despawnUi.Invoke(focusedObject);
+                    canGrabItem = false;
                     return;
                 }
             }
@@ -100,6 +101,7 @@ public class Hider : NetworkBehaviour
         rbObject.useGravity = true;
         ActionManager.release.Invoke();
         objectInHand = null;
+        canGrabItem = false ;
     }
 
     private void MoveFurniture()
