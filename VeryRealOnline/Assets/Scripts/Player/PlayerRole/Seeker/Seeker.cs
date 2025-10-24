@@ -9,16 +9,15 @@ public class Seeker : MonoBehaviour
 
     private void OnEnable()
     {
-        playerLayer = LayerMask.NameToLayer("Player");
+        playerLayer = LayerMask.GetMask("Player");
     }
     private void Update()
     {
-        Debug.Log("im a seeker");
         RaycastHit hit;
+        Debug.DrawRay(transform.position, transform.forward * 5f, Color.red, 0.1f);
+
         if (Physics.Raycast(transform.position, transform.forward, out hit, 5f, playerLayer))
         {
-            if (hit.transform.gameObject == gameObject )
-                return;
 
             ActionManager.spawnUi.Invoke(hit.transform.gameObject, hit.point, Camera.main);
             focusedObject = hit.transform.gameObject;
