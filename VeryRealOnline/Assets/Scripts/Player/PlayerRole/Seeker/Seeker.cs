@@ -13,7 +13,7 @@ public class Seeker : MonoBehaviour
     }
     private void Update()
     {
-
+        Debug.Log("im a seeker");
         RaycastHit hit;
         if (Physics.Raycast(transform.position, transform.forward, out hit, 5f, playerLayer))
         {

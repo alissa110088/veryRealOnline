@@ -25,11 +25,6 @@ public class LobbyWait : NetworkBehaviour
         }
     }
 
-    private void Update()
-    {
-        Debug.Log(IsSpawned);        
-    }
-
     public override void OnNetworkDespawn()
     {
         base.OnNetworkDespawn();
