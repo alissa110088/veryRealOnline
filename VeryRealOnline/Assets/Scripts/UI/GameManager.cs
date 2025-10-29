@@ -7,13 +7,8 @@ using UnityEngine;
 
 public class GameManager : NetworkBehaviour
 {
-    private List<PlayerNetwork> players = new List<PlayerNetwork>();
-
-    public List<PlayerNetwork> Players
-    {
-        get { return players; }
-        private set { players = value; }
-    }
+    public List<PlayerNetwork> playersAlive = new List<PlayerNetwork>();
+    public List<PlayerNetwork> playersDead = new List<PlayerNetwork>();    
 
     private float ChanceToBeSeeker = 0.2f;
 
@@ -38,13 +33,13 @@ public class GameManager : NetworkBehaviour
 
     private void AddPlayer(PlayerNetwork pNetwork)
     {
-        players.Add(pNetwork);
+        playersAlive.Add(pNetwork);
         pNetwork.enabled = false;
     }
 
     private void ActivateAllPlayer()
     {
-        foreach (PlayerNetwork network in players)
+        foreach (PlayerNetwork network in playersAlive)
         {
             network.enabled = true;
         }
@@ -55,19 +50,19 @@ public class GameManager : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void GetShuffleListServerRpc()
     {
-        int howMany = Mathf.RoundToInt(players.Count * ChanceToBeSeeker);
+        int howMany = Mathf.RoundToInt(playersAlive.Count * ChanceToBeSeeker);
 
-        if (howMany == 0 && players.Count > 1)
+        if (howMany == 0 && playersAlive.Count > 1)
         {
             howMany = 1;
         }
 
-        PlayerNetwork[] lListShuffled = new PlayerNetwork[players.Count];
-        foreach (PlayerNetwork network in players)
+        PlayerNetwork[] lListShuffled = new PlayerNetwork[playersAlive.Count];
+        foreach (PlayerNetwork network in playersAlive)
         {
             while (!lListShuffled.Contains(network))
             {
-                int lIndex = Random.Range(0, players.Count);
+                int lIndex = Random.Range(0, playersAlive.Count);
                 if (lListShuffled[lIndex] == null)
                 {
                     lListShuffled[lIndex] = network;
@@ -88,7 +83,7 @@ public class GameManager : NetworkBehaviour
         int i = 0;
         foreach (ulong clientId in playerIds)
         {
-            PlayerNetwork player = players.Find(p => p.OwnerClientId == clientId);
+            PlayerNetwork player = playersAlive.Find(p => p.OwnerClientId == clientId);
             if (player == null) continue;
 
             if (i < howMany)
