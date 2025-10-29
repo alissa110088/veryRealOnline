@@ -58,6 +58,7 @@ public class Hider : NetworkBehaviour
     private void Update()
     {
 
+        Debug.DrawRay(transform.position, transform.forward * 5f, Color.red, 0.1f);
 
         if (!IsOwner) return;
 
