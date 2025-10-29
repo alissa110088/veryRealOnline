@@ -100,7 +100,7 @@ public class Seeker : NetworkBehaviour
             if (spectate != null)
             {
                 spectate.enabled = true;
-                spectate.RemoveMoveOption(pTarget);
+                spectate.RemoveMoveOption(pTarget, gameObject);
             }
         }
     }
