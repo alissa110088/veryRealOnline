@@ -10,6 +10,7 @@ public class PlayerNetwork : NetworkBehaviour
     [SerializeField] private float moveSpeed = 10f;
     [SerializeField] private Rigidbody rb;
     [SerializeField] private float jumpForce = 5f;
+    public Vector3 camPos;
 
     private Vector3 direction;
     private InputSystem_Actions inputActions;
@@ -145,5 +146,4 @@ public class PlayerNetwork : NetworkBehaviour
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
     }
-
 }

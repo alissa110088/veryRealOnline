@@ -101,7 +101,7 @@ MonoBehaviour:
   SyncPositionY: 1
   SyncPositionZ: 1
   SyncRotAngleX: 0
-  SyncRotAngleY: 0
+  SyncRotAngleY: 1
   SyncRotAngleZ: 0
   SyncScaleX: 0
   SyncScaleY: 0
@@ -199,6 +199,7 @@ MonoBehaviour:
   moveSpeed: 10
   rb: {fileID: 4013627882963081048}
   jumpForce: 7
+  camPos: {x: 0.048, y: 0.649, z: 0.025}
 --- !u!114 &4271655008237625298
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -245,6 +246,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hider
   ShowTopMostFoldoutHeaderGroup: 1
+  cam: {fileID: 8388049688777869280}
 --- !u!114 &8420016430571025698
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -257,6 +259,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ec1e457545693f48a7b677d17b9b990, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Seeker
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &790939626414460321
 GameObject:
   m_ObjectHideFlags: 0
@@ -608,6 +611,7 @@ GameObject:
   - component: {fileID: 8370359646022104386}
   - component: {fileID: 5260734575036562878}
   - component: {fileID: 7496159573495249031}
+  - component: {fileID: 77912547654730805}
   m_Layer: 7
   m_Name: CameraPlayer
   m_TagString: MainCamera
@@ -748,3 +752,17 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   camera: {fileID: 8388049688777869280}
   audioListener: {fileID: 8370359646022104386}
+--- !u!114 &77912547654730805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8662285270590012633}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6436067f482e3814bad8c0ae18da1c90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Spectate
+  ShowTopMostFoldoutHeaderGroup: 1
+  playerNetwork: {fileID: 1352528031009393372}

@@ -29,10 +29,12 @@ public class PlayerRole : MonoBehaviour
         if(playerRole == EnumPlayerState.seeker)
         {
             seekerScript.enabled = true;
+            gameObject.tag = "seeker";
         }
         else if(playerRole == EnumPlayerState.hider)
         {
-            hiderScript.enabled = true; ;
+            hiderScript.enabled = true;
+            gameObject.tag = "hider";
         }
     }
 }

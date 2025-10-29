@@ -8,8 +8,28 @@ using UnityEngine;
 public class GameManager : NetworkBehaviour
 {
     private List<PlayerNetwork> players = new List<PlayerNetwork>();
+
+    public List<PlayerNetwork> Players
+    {
+        get { return players; }
+        private set { players = value; }
+    }
+
     private float ChanceToBeSeeker = 0.2f;
 
+    public static GameManager instance;
+
+    private void Awake()
+    {
+        if(instance != null && instance != this)
+        {
+            Destroy(gameObject); 
+        }
+        else
+        {
+            instance = this;
+        }
+    }
     public override void OnNetworkSpawn()
     {
         ActionManager.addPlayer += AddPlayer;
@@ -62,7 +82,7 @@ public class GameManager : NetworkBehaviour
         GivePlayerRoleClientRpc(playerIds, howMany);
     }
 
-    [ClientRpc] 
+    [ClientRpc]
     private void GivePlayerRoleClientRpc(ulong[] playerIds, int howMany)
     {
         int i = 0;

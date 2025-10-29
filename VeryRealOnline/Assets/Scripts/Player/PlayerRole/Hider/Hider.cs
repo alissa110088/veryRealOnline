@@ -4,6 +4,8 @@ using UnityEngine.InputSystem;
 
 public class Hider : NetworkBehaviour
 {
+    public Camera cam;
+
     //[SerializeField] private LayerMask objectLayer;
     private float distanceToGrab = 5f;
     private float SmoothMovementFourniture = 15f;
@@ -29,7 +31,21 @@ public class Hider : NetworkBehaviour
 
         inputActions.Player.Interact.started += GetFurniture;
         inputActions.Player.Interact.canceled += (ctx) => LetGo();
-        inputActions.Player.Enable();
+
+        
+    }
+
+    private void OnEnable()
+    {
+        if (IsOwner)
+        {
+            inputActions.Player.Enable();
+        }
+    }
+
+    private void OnDisable()
+    {
+        inputActions.Player.Disable();
     }
 
     public override void OnNetworkDespawn()
@@ -75,7 +91,10 @@ public class Hider : NetworkBehaviour
 
     private void GetFurniture(InputAction.CallbackContext ctx)
     {
+        Debug.Log(IsOwner + " " + NetworkObject.NetworkObjectId.ToString());
+
         if (!IsOwner) return;
+
 
         if (canGrabItem)
         {
@@ -95,6 +114,8 @@ public class Hider : NetworkBehaviour
 
     private void LetGo()
     {
+        Debug.Log(IsOwner);
+
         if (!IsOwner && objectInHand == null) return;
 
         objectNetwork.RemoveOwnership();
