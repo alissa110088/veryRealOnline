@@ -1,12 +1,18 @@
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class Hider : NetworkBehaviour
 {
     public Camera cam;
 
     //[SerializeField] private LayerMask objectLayer;
+    [SerializeField] private Texture green;
+    [SerializeField] private Texture darkGreen;
+    [SerializeField] private Texture red;
+    [SerializeField] private RawImage mouse;
+
     private float distanceToGrab = 5f;
     private float SmoothMovementFourniture = 15f;
     private LayerMask objectLayer;
@@ -79,7 +85,8 @@ public class Hider : NetworkBehaviour
             {
                 ActionManager.spawnUi.Invoke(hit.transform.gameObject, hit.point, cam);
                 focusedObject = hit.transform.gameObject;
-                canGrabItem = true; 
+                canGrabItem = true;
+                mouse.texture = darkGreen;
             }
             else
             {
@@ -87,6 +94,9 @@ public class Hider : NetworkBehaviour
                 {
                     ActionManager.despawnUi.Invoke(focusedObject);
                     canGrabItem = false;
+                    if(mouse.texture != green)
+                        mouse.texture = green;
+
                     return;
                 }
             }
@@ -108,11 +118,11 @@ public class Hider : NetworkBehaviour
             focusedObject = null;
 
             grabDistance = Vector3.Distance(Camera.main.transform.position, hit.point);
-            Debug.Log(hit.transform.gameObject);
             objectInHand = hit.transform.gameObject;
             rbObject = objectInHand.GetComponent<Rigidbody>();
             rbObject.useGravity = false;
             objectNetwork = objectInHand.GetComponent<NetworkObject>();
+            mouse.texture = red;
             RequestOwnershipServerRpc(objectNetwork.NetworkObjectId, NetworkManager.Singleton.LocalClientId);
         }
 
@@ -129,6 +139,7 @@ public class Hider : NetworkBehaviour
         ActionManager.release.Invoke();
         objectInHand = null;
         canGrabItem = false ;
+        mouse.texture = green;
     }
 
     private void MoveFurniture()

@@ -4,12 +4,14 @@ using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class PlayerNetwork : NetworkBehaviour
 {
     [SerializeField] private float moveSpeed = 10f;
     [SerializeField] private Rigidbody rb;
     [SerializeField] private float jumpForce = 5f;
+    [SerializeField] private RawImage mouse;
     public Vector3 camPos;
 
     private Vector3 direction;
@@ -48,6 +50,7 @@ public class PlayerNetwork : NetworkBehaviour
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+        mouse.enabled = true;
     }
 
     private void OnDisable()
@@ -71,6 +74,7 @@ public class PlayerNetwork : NetworkBehaviour
     private void FixedUpdate()
     {
         if (!IsOwner) return;
+
 
         direction = transform.forward * inputDirection.z + transform.right * inputDirection.x;
 
