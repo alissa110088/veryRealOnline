@@ -58,7 +58,6 @@ public class Hider : NetworkBehaviour
     private void Update()
     {
 
-        Debug.DrawRay(transform.position, transform.forward * 5f, Color.red, 0.1f);
 
         if (!IsOwner) return;
 
@@ -68,14 +67,19 @@ public class Hider : NetworkBehaviour
 
         }
 
+        Vector3 lOrigin = cam.transform.position;
+        Vector3 lDirection = cam.transform.forward;
+
+        Debug.DrawRay(lOrigin, lDirection * 5f, Color.red, 0.1f);
+
 
         if (objectInHand == null)
         {
-            if (Physics.Raycast(transform.position, transform.forward, out hit, distanceToGrab, objectLayer))
+            if (Physics.Raycast(lOrigin, lDirection, out hit, distanceToGrab, objectLayer))
             {
-                ActionManager.spawnUi.Invoke(hit.transform.gameObject, hit.point, Camera.main);
+                ActionManager.spawnUi.Invoke(hit.transform.gameObject, hit.point, cam);
                 focusedObject = hit.transform.gameObject;
-                canGrabItem = true;
+                canGrabItem = true; 
             }
             else
             {
@@ -107,6 +111,7 @@ public class Hider : NetworkBehaviour
             Debug.Log(hit.transform.gameObject);
             objectInHand = hit.transform.gameObject;
             rbObject = objectInHand.GetComponent<Rigidbody>();
+            rbObject.useGravity = false;
             objectNetwork = objectInHand.GetComponent<NetworkObject>();
             RequestOwnershipServerRpc(objectNetwork.NetworkObjectId, NetworkManager.Singleton.LocalClientId);
         }

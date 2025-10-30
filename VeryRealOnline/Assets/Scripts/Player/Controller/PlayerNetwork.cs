@@ -33,6 +33,9 @@ public class PlayerNetwork : NetworkBehaviour
 
     private void OnEnable()
     {
+        transform.position = new Vector3(0f, 0f, 0f);
+
+
         if (!first)
             return;
 
@@ -52,6 +55,7 @@ public class PlayerNetwork : NetworkBehaviour
         if (!first)
         {
             first = true;
+
             return;
         }
 

@@ -1,29 +1,45 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using TMPro;
 using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameManager : NetworkBehaviour
 {
-    public List<PlayerNetwork> playersAlive = new List<PlayerNetwork>();
-    public List<PlayerNetwork> playersDead = new List<PlayerNetwork>();    
+    private List<PlayerNetwork> playersAlive = new List<PlayerNetwork>();
+    private List<PlayerNetwork> playersDead = new List<PlayerNetwork>();
 
     private float ChanceToBeSeeker = 0.2f;
+    private bool startTimer;
+
+    [SerializeField] private NetworkVariable<float> time = new NetworkVariable<float>(600f ,NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    [SerializeField] private TextMeshProUGUI text;
+    [SerializeField] private GameObject winCanvas;
+    [SerializeField] private GameObject seekerWin;
+    [SerializeField] private GameObject hiderWin;
 
     public static GameManager instance;
 
     private void Awake()
     {
-        if(instance != null && instance != this)
+        if (instance != null && instance != this)
         {
-            Destroy(gameObject); 
+            Destroy(gameObject);
         }
         else
         {
             instance = this;
         }
+    }
+
+    private void Update()
+    {
+        if (!startTimer)
+            return;
+
+        TimerServerRpc();
     }
     public override void OnNetworkSpawn()
     {
@@ -35,6 +51,30 @@ public class GameManager : NetworkBehaviour
     {
         playersAlive.Add(pNetwork);
         pNetwork.enabled = false;
+    }
+
+    public void RemovePlayer(PlayerNetwork pNetwork)
+    {
+        playersAlive.Remove(pNetwork);
+        playersDead.Add(pNetwork);
+
+        foreach (PlayerNetwork lNet in playersAlive)
+        {
+            if (lNet.gameObject.CompareTag("hider"))
+                return;
+        }
+
+        seekerWinRpc();
+    }
+
+    [Rpc(SendTo.Everyone)]
+
+    private void seekerWinRpc()
+    {
+        startTimer = false;
+        text.enabled = false;
+        winCanvas.SetActive(true);
+        seekerWin.SetActive(true);
     }
 
     private void ActivateAllPlayer()
@@ -93,5 +133,32 @@ public class GameManager : NetworkBehaviour
 
             i++;
         }
+
+        startTimer = true;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void TimerServerRpc()
+    {
+        time.Value -= Time.deltaTime;
+        int lMinute = Mathf.FloorToInt(time.Value / 60f);
+        int lSeconde = Mathf.FloorToInt(time.Value % 60f);
+
+        UpdateTextRpc(lMinute, lSeconde);
+    }
+
+    [Rpc(SendTo.Everyone)]
+
+    private void UpdateTextRpc(int pMinute, int pSeconde)
+    {
+        text.text = pMinute.ToString() + " : " + pSeconde.ToString();
+
+        if (pMinute == 0 && pSeconde == 0)
+        {
+            startTimer = false;
+            winCanvas.SetActive(true);
+            hiderWin.SetActive(true);
+        }
+
     }
 }

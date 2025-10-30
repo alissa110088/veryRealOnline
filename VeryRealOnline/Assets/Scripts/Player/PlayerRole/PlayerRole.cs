@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class PlayerRole : MonoBehaviour
 {
-    [SerializeField] private EnumPlayerState playerRole;
+    private EnumPlayerState playerRole;
+
     [SerializeField] private Hider hiderScript;
     [SerializeField] private Seeker seekerScript;
 

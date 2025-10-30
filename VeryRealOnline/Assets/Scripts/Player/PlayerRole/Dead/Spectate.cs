@@ -25,9 +25,8 @@ public class Spectate : NetworkBehaviour
 
 
     private void DestroyObject()
-    {
-        GameManager.instance.playersDead.Add(playerNetwork);
-        GameManager.instance.playersAlive.Remove(playerNetwork);
+    {;
+        GameManager.instance.RemovePlayer(playerNetwork);
         Destroy(playerNetwork.gameObject);
 
     }

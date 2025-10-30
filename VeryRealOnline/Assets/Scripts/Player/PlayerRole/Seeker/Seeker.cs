@@ -6,13 +6,12 @@ using static UnityEngine.GraphicsBuffer;
 
 public class Seeker : NetworkBehaviour
 {
-    //[SerializeField] private LayerMask playerLayer;
-
-
     private LayerMask playerLayer;
     private GameObject focusedObject;
     private InputSystem_Actions inputActions;
     private bool canKill;
+
+    [SerializeField] private Camera cam;
 
     private Spectate spectate;
 
@@ -48,10 +47,13 @@ public class Seeker : NetworkBehaviour
         if (!IsOwner)
             return;
 
-        RaycastHit hit;
-        Debug.DrawRay(transform.position, transform.forward * 5f, Color.red, 0.1f);
+        Vector3 lOrigin = cam.transform.position;
+        Vector3 lDirection = cam.transform.forward;
 
-        if (Physics.Raycast(transform.position, transform.forward, out hit, 5f, playerLayer))
+        RaycastHit hit;
+        Debug.DrawRay(lOrigin, lDirection * 5f, Color.red, 0.1f);
+
+        if (Physics.Raycast(lOrigin, lDirection, out hit, 5f, playerLayer))
         {
             if (!hit.transform.gameObject.CompareTag("hider"))
                 return;
