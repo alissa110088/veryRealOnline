@@ -2,10 +2,16 @@ using System.Globalization;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 using static UnityEngine.GraphicsBuffer;
 
 public class Seeker : NetworkBehaviour
 {
+    [SerializeField] private RawImage mouse;
+    [SerializeField] private Texture green;
+    [SerializeField] private Texture darkGreen;
+    [SerializeField] private Texture red;
+
     private LayerMask playerLayer;
     private GameObject focusedObject;
     private InputSystem_Actions inputActions;
@@ -18,7 +24,8 @@ public class Seeker : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         inputActions = new InputSystem_Actions();
-
+        if (IsOwner)
+            mouse.gameObject.SetActive(true);
         inputActions.Player.Interact.started += OnHit;
     }
 
@@ -58,7 +65,7 @@ public class Seeker : NetworkBehaviour
             if (!hit.transform.gameObject.CompareTag("hider"))
                 return;
 
-            ActionManager.spawnUi.Invoke(hit.transform.gameObject, hit.point, Camera.main);
+            mouse.texture = darkGreen;
             focusedObject = hit.transform.gameObject;
             canKill = true;
         }
@@ -69,6 +76,9 @@ public class Seeker : NetworkBehaviour
                 ActionManager.despawnUi.Invoke(focusedObject);
                 focusedObject = null;
                 canKill = false;
+
+                if(mouse.texture != green)
+                    mouse.texture = green;
             }
         }
     }
@@ -78,6 +88,7 @@ public class Seeker : NetworkBehaviour
         if (!canKill || !IsOwner ||focusedObject == null)
         return;
 
+        mouse.texture = red;
         NetworkObject targetNetObj = focusedObject.GetComponent<NetworkObject>();
         if (targetNetObj != null)
         {

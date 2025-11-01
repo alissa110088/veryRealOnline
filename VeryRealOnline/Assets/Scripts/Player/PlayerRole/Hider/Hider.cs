@@ -32,7 +32,6 @@ public class Hider : NetworkBehaviour
 
         objectLayer = LayerMask.GetMask("Obstacle");
 
-
         inputActions = new InputSystem_Actions();
 
         inputActions.Player.Interact.started += GetFurniture;
@@ -83,7 +82,7 @@ public class Hider : NetworkBehaviour
         {
             if (Physics.Raycast(lOrigin, lDirection, out hit, distanceToGrab, objectLayer))
             {
-                ActionManager.spawnUi.Invoke(hit.transform.gameObject, hit.point, cam);
+                //ActionManager.spawnUi.Invoke(hit.transform.gameObject, hit.point, cam);
                 focusedObject = hit.transform.gameObject;
                 canGrabItem = true;
                 mouse.texture = darkGreen;
@@ -114,7 +113,7 @@ public class Hider : NetworkBehaviour
         if (canGrabItem)
         {
             ActionManager.grab.Invoke();
-            ActionManager.despawnUi.Invoke(focusedObject);
+            //ActionManager.despawnUi.Invoke(focusedObject);
             focusedObject = null;
 
             grabDistance = Vector3.Distance(Camera.main.transform.position, hit.point);

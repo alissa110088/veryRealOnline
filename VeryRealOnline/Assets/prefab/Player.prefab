@@ -58,7 +58,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 676757414
+  GlobalObjectIdHash: 1978953931
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -265,6 +265,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Seeker
   ShowTopMostFoldoutHeaderGroup: 1
+  mouse: {fileID: 1183443753690975852}
+  green: {fileID: 2800000, guid: 4efa44422012c5d47ac1ef3726c3c6e5, type: 3}
+  darkGreen: {fileID: 2800000, guid: 520bf478fe841194cb1e2000e8e07f42, type: 3}
+  red: {fileID: 2800000, guid: 2ef060cf8c8e12e46a847a51741bbc7f, type: 3}
   cam: {fileID: 8388049688777869280}
 --- !u!1 &790939626414460321
 GameObject:

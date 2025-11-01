@@ -30,7 +30,8 @@ public class PlayerNetwork : NetworkBehaviour
         base.OnNetworkSpawn();
 
         StartCoroutine(RegisterPlayerNextFrame());
-
+        if(first && IsOwner)
+                mouse.gameObject.SetActive(true);
     }
 
     private void OnEnable()
@@ -50,7 +51,6 @@ public class PlayerNetwork : NetworkBehaviour
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
-        mouse.enabled = true;
     }
 
     private void OnDisable()
