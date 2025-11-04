@@ -1,4 +1,5 @@
 using Unity.Netcode;
+using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -24,6 +25,7 @@ public class Hider : NetworkBehaviour
     private Rigidbody rbObject;
     private NetworkObject objectNetwork;
     private GameObject focusedObject;
+    private Vector3 lCurrentAxis = new Vector3(0, 0, 1);
 
 
     public override void OnNetworkSpawn()
@@ -35,9 +37,9 @@ public class Hider : NetworkBehaviour
         inputActions = new InputSystem_Actions();
 
         inputActions.Player.Interact.started += GetFurniture;
-        inputActions.Player.Interact.canceled += (ctx) => LetGo();
-
-        
+        inputActions.Player.Interact.canceled += LetGo;
+        inputActions.Player.RotateChange.performed += Rotate;
+        inputActions.Player.rotate.started += ChangeAxis;
     }
 
     private void OnEnable()
@@ -93,7 +95,7 @@ public class Hider : NetworkBehaviour
                 {
                     ActionManager.despawnUi.Invoke(focusedObject);
                     canGrabItem = false;
-                    if(mouse.texture != green)
+                    if (mouse.texture != green)
                         mouse.texture = green;
 
                     return;
@@ -127,9 +129,8 @@ public class Hider : NetworkBehaviour
 
     }
 
-    private void LetGo()
+    private void LetGo(InputAction.CallbackContext ctx)
     {
-        Debug.Log(IsOwner);
 
         if (!IsOwner && objectInHand == null) return;
 
@@ -137,8 +138,36 @@ public class Hider : NetworkBehaviour
         rbObject.useGravity = true;
         ActionManager.release.Invoke();
         objectInHand = null;
-        canGrabItem = false ;
+        canGrabItem = false;
         mouse.texture = green;
+    }
+
+    private void ChangeAxis(InputAction.CallbackContext ctx)
+    {
+        if (lCurrentAxis.x != 0)
+            lCurrentAxis = Vector3.up;
+        else if (lCurrentAxis.y != 0)
+            lCurrentAxis = Vector3.forward;
+        else if (lCurrentAxis.z != 0)
+            lCurrentAxis = Vector3.right;
+    }
+
+    private void Rotate(InputAction.CallbackContext ctx)
+    {
+        if (objectInHand == null) return;
+
+        Debug.Log("is here");
+        Vector2 lAngle = ctx.ReadValue<Vector2>();
+        Debug.Log(lAngle);
+
+        Vector3 lFinalAngle = lCurrentAxis * lAngle.y * 1000 * Time.deltaTime;
+
+        Debug.Log(lFinalAngle);
+        Debug.Log(lCurrentAxis);
+        lFinalAngle = new Vector3(lCurrentAxis.x * lFinalAngle.x, lCurrentAxis.y * lFinalAngle.y, lCurrentAxis.z * lFinalAngle.z);
+        Debug.Log(lFinalAngle);
+        objectInHand.transform.Rotate(lFinalAngle, Space.Self);
+        Debug.Log(objectInHand.transform.rotation.eulerAngles);
     }
 
     private void MoveFurniture()

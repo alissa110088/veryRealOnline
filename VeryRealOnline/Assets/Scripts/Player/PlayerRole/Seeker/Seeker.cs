@@ -24,8 +24,7 @@ public class Seeker : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         inputActions = new InputSystem_Actions();
-        if (IsOwner)
-            mouse.gameObject.SetActive(true);
+        
         inputActions.Player.Interact.started += OnHit;
     }
 

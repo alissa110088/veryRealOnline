@@ -2856,6 +2856,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: furniture (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 4479205410421946469, guid: c9bff505f66dd874695e3bd6d51bebb7, type: 3}
+      propertyPath: m_Constraints
+      value: 112
+      objectReference: {fileID: 0}
     - target: {fileID: 4909908238501642618, guid: c9bff505f66dd874695e3bd6d51bebb7, type: 3}
       propertyPath: furniture
       value: 
@@ -4569,6 +4573,10 @@ PrefabInstance:
     - target: {fileID: 2954239221683951665, guid: c9bff505f66dd874695e3bd6d51bebb7, type: 3}
       propertyPath: m_Name
       value: furniture
+      objectReference: {fileID: 0}
+    - target: {fileID: 4479205410421946469, guid: c9bff505f66dd874695e3bd6d51bebb7, type: 3}
+      propertyPath: m_Constraints
+      value: 112
       objectReference: {fileID: 0}
     - target: {fileID: 4909908238501642618, guid: c9bff505f66dd874695e3bd6d51bebb7, type: 3}
       propertyPath: furniture
