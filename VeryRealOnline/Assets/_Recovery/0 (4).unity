@@ -1106,6 +1106,9 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 116448, guid: ed6ed70884be26a479dd8a819af56329, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 2088716962}
+    - targetCorrespondingSourceObject: {fileID: 116448, guid: ed6ed70884be26a479dd8a819af56329, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 2088716963}
   m_SourcePrefab: {fileID: 100100000, guid: ed6ed70884be26a479dd8a819af56329, type: 3}
 --- !u!1 &595250998
@@ -4375,7 +4378,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1548869575
+  GlobalObjectIdHash: 4002746060
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -4512,6 +4515,18 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 116448, guid: ed6ed70884be26a479dd8a819af56329, type: 3}
   m_PrefabInstance: {fileID: 579911420}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2088716962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2088716958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce6a5afc8ced2ab498e24f9cfcb9071f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SetUpFourniture
 --- !u!65 &2088716963
 BoxCollider:
   m_ObjectHideFlags: 0

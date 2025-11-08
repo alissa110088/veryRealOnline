@@ -19,6 +19,7 @@ public class PlayerNetwork : NetworkBehaviour
     private Vector3 inputDirection;
 
     private bool isGrounded;
+    private bool isOnObject;
     private bool shouldJump;
     private bool first;
 
@@ -34,8 +35,6 @@ public class PlayerNetwork : NetworkBehaviour
 
     private void OnEnable()
     {
-        //transform.position = new Vector3(0f, 0f, 0f);
-
 
         if (!first)
             return;
@@ -92,7 +91,7 @@ public class PlayerNetwork : NetworkBehaviour
 
         Jump();
 
-        if (isGrounded)
+        if (isGrounded || isOnObject)
         {
             direction = direction * moveSpeed;
             rb.linearVelocity = new Vector3(direction.x, rb.linearVelocity.y, direction.z);
@@ -122,9 +121,13 @@ public class PlayerNetwork : NetworkBehaviour
     {
         if (!IsOwner) return;
 
-        if (collision.gameObject.layer == LayerMask.NameToLayer(groundLayerName) && !isGrounded)
+        if (collision.gameObject.layer == LayerMask.NameToLayer(groundLayerName))
         {
             isGrounded = true;
+        }
+        else if(collision.gameObject.layer == LayerMask.NameToLayer(ObstacleLayerName))
+        {
+            isOnObject = true;
         }
     }
 
@@ -132,9 +135,14 @@ public class PlayerNetwork : NetworkBehaviour
     {
         if (!IsOwner) return;
 
-        if (collision.gameObject.layer == LayerMask.NameToLayer(groundLayerName) && isGrounded)
+        if (collision.gameObject.layer == LayerMask.NameToLayer(groundLayerName)  && isGrounded)
         {
             isGrounded = false;
+        }
+        else if (collision.gameObject.layer == LayerMask.NameToLayer(ObstacleLayerName))
+        {
+            //sert que si on touche les deux objets et quon arrete de toucher la sa nous compte
+            isOnObject = false;
         }
     }
 
@@ -152,7 +160,7 @@ public class PlayerNetwork : NetworkBehaviour
     {
         if (!IsOwner) return;
 
-        if (isGrounded && shouldJump)
+        if ((isGrounded|| isOnObject) && shouldJump)
         {
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);

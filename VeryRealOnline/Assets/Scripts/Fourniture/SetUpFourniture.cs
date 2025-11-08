@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class SetUpFourniture : MonoBehaviour
 {
+    private int layerInt = 6;
     private void OnEnable()
     {
         gameObject.AddComponent<NetworkObject>();
@@ -27,6 +28,8 @@ public class SetUpFourniture : MonoBehaviour
         Fourniture lFurniture = gameObject.AddComponent<Fourniture>();
         lFurniture.rb = lRB;
 
-        gameObject.layer = 6;
+        gameObject.layer = layerInt;
+
+        Destroy(this);
     }
 }

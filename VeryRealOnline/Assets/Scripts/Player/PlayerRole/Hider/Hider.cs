@@ -64,14 +64,11 @@ public class Hider : NetworkBehaviour
 
     private void Update()
     {
-
-
         if (!IsOwner) return;
 
         if (objectInHand != null)
         {
             MoveFurniture();
-
         }
 
         Vector3 lOrigin = cam.transform.position;
@@ -84,21 +81,17 @@ public class Hider : NetworkBehaviour
         {
             if (Physics.Raycast(lOrigin, lDirection, out hit, distanceToGrab, objectLayer))
             {
-                //ActionManager.spawnUi.Invoke(hit.transform.gameObject, hit.point, cam);
                 focusedObject = hit.transform.gameObject;
                 canGrabItem = true;
                 mouse.texture = darkGreen;
             }
             else
             {
-                if (focusedObject != null)
+                if (canGrabItem)
                 {
-                    ActionManager.despawnUi.Invoke(focusedObject);
                     canGrabItem = false;
                     if (mouse.texture != green)
                         mouse.texture = green;
-
-                    return;
                 }
             }
         }
@@ -107,19 +100,17 @@ public class Hider : NetworkBehaviour
 
     private void GetFurniture(InputAction.CallbackContext ctx)
     {
-        Debug.Log(IsOwner + " " + NetworkObject.NetworkObjectId.ToString());
-
         if (!IsOwner) return;
 
 
         if (canGrabItem)
         {
-            ActionManager.grab.Invoke();
-            //ActionManager.despawnUi.Invoke(focusedObject);
             focusedObject = null;
 
             grabDistance = Vector3.Distance(Camera.main.transform.position, hit.point);
             objectInHand = hit.transform.gameObject;
+            ActionManager.grab.Invoke(objectInHand);
+
             rbObject = objectInHand.GetComponent<Rigidbody>();
             rbObject.useGravity = false;
             objectNetwork = objectInHand.GetComponent<NetworkObject>();
@@ -156,18 +147,12 @@ public class Hider : NetworkBehaviour
     {
         if (objectInHand == null) return;
 
-        Debug.Log("is here");
         Vector2 lAngle = ctx.ReadValue<Vector2>();
-        Debug.Log(lAngle);
 
         Vector3 lFinalAngle = lCurrentAxis * lAngle.y * 1000 * Time.deltaTime;
 
-        Debug.Log(lFinalAngle);
-        Debug.Log(lCurrentAxis);
         lFinalAngle = new Vector3(lCurrentAxis.x * lFinalAngle.x, lCurrentAxis.y * lFinalAngle.y, lCurrentAxis.z * lFinalAngle.z);
-        Debug.Log(lFinalAngle);
         objectInHand.transform.Rotate(lFinalAngle, Space.Self);
-        Debug.Log(objectInHand.transform.rotation.eulerAngles);
     }
 
     private void MoveFurniture()
@@ -175,10 +160,7 @@ public class Hider : NetworkBehaviour
         Ray raycastToMouse = Camera.main.ScreenPointToRay(Input.mousePosition);
         Vector3 pos = raycastToMouse.origin + raycastToMouse.direction * grabDistance;
 
-        rbObject.MovePosition(Vector3.Lerp(
-        objectInHand.transform.position,
-        pos,
-        Time.deltaTime * SmoothMovementFourniture));
+        rbObject.MovePosition(Vector3.Lerp(objectInHand.transform.position, pos, Time.deltaTime * SmoothMovementFourniture));
     }
 
     [ServerRpc(RequireOwnership = false)]
