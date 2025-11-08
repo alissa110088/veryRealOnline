@@ -132,7 +132,7 @@ public class Hider : NetworkBehaviour
     private void LetGo(InputAction.CallbackContext ctx)
     {
 
-        if (!IsOwner && objectInHand == null) return;
+        if (!IsOwner || objectInHand == null) return;
 
         objectNetwork.RemoveOwnership();
         rbObject.useGravity = true;

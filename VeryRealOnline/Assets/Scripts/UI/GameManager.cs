@@ -50,7 +50,8 @@ public class GameManager : NetworkBehaviour
     private void AddPlayer(PlayerNetwork pNetwork)
     {
         playersAlive.Add(pNetwork);
-        pNetwork.enabled = false;
+        pNetwork.gameObject.SetActive(false);
+        //pNetwork.enabled = false;
     }
 
     public void RemovePlayer(PlayerNetwork pNetwork)
@@ -82,8 +83,9 @@ public class GameManager : NetworkBehaviour
 
         for (int i = 0; i < playersAlive.Count; i++)
         {
-            playersAlive[i].enabled = true;
+            //playersAlive[i].enabled = true;
             playersAlive[i].gameObject.transform.position = new Vector3(i, 0, 0);
+            playersAlive[i].gameObject.SetActive(true);
         }
         foreach (PlayerNetwork network in playersAlive)
         {
