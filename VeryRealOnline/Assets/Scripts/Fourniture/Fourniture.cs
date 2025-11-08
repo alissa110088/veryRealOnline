@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Fourniture : MonoBehaviour
 {
-    [SerializeField] private Rigidbody rb;
+    public Rigidbody rb;
 
     private void OnEnable()
     {

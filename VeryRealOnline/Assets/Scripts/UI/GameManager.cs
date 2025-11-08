@@ -79,6 +79,12 @@ public class GameManager : NetworkBehaviour
 
     private void ActivateAllPlayer()
     {
+
+        for (int i = 0; i < playersAlive.Count; i++)
+        {
+            playersAlive[i].enabled = true;
+            playersAlive[i].gameObject.transform.position = new Vector3(i, 0, 0);
+        }
         foreach (PlayerNetwork network in playersAlive)
         {
             network.enabled = true;
