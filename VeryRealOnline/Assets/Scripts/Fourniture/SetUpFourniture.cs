@@ -6,6 +6,7 @@ using UnityEngine;
 public class SetUpFourniture : MonoBehaviour
 {
     private int layerInt = 6;
+    private int massRB = 10;
     private void OnEnable()
     {
         gameObject.AddComponent<NetworkObject>();
@@ -24,6 +25,7 @@ public class SetUpFourniture : MonoBehaviour
         Rigidbody lRB = gameObject.GetComponent<Rigidbody>();
         lRB.freezeRotation = true;
         lRB.isKinematic = false;
+        lRB.mass = massRB;
 
         Fourniture lFurniture = gameObject.AddComponent<Fourniture>();
         lFurniture.rb = lRB;

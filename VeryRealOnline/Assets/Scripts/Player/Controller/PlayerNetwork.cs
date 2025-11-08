@@ -81,14 +81,6 @@ public class PlayerNetwork : NetworkBehaviour
 
         direction = transform.forward * inputDirection.z + transform.right * inputDirection.x;
 
-        //TODO ne marche pas a regler
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, direction.normalized, out hit, 1f))
-        {
-            Vector3 push = Vector3.Cross(hit.normal, Vector3.up);
-            rb.position += push * 0.01f;
-        }
-
         Jump();
 
         if (isGrounded || isOnObject)
@@ -125,7 +117,7 @@ public class PlayerNetwork : NetworkBehaviour
         {
             isGrounded = true;
         }
-        else if(collision.gameObject.layer == LayerMask.NameToLayer(ObstacleLayerName))
+        else if (collision.gameObject.layer == LayerMask.NameToLayer(ObstacleLayerName))
         {
             isOnObject = true;
         }
@@ -135,7 +127,7 @@ public class PlayerNetwork : NetworkBehaviour
     {
         if (!IsOwner) return;
 
-        if (collision.gameObject.layer == LayerMask.NameToLayer(groundLayerName)  && isGrounded)
+        if (collision.gameObject.layer == LayerMask.NameToLayer(groundLayerName) && isGrounded)
         {
             isGrounded = false;
         }
@@ -160,7 +152,7 @@ public class PlayerNetwork : NetworkBehaviour
     {
         if (!IsOwner) return;
 
-        if ((isGrounded|| isOnObject) && shouldJump)
+        if ((isGrounded || isOnObject) && shouldJump)
         {
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);

@@ -47,11 +47,16 @@ public class GameManager : NetworkBehaviour
         ActionManager.activatePlayer += ActivateAllPlayer;
     }
 
+    public void OnDestroy()
+    {
+        ActionManager.addPlayer -= AddPlayer;
+        ActionManager.activatePlayer -= ActivateAllPlayer;
+    }
+
     private void AddPlayer(PlayerNetwork pNetwork)
     {
         playersAlive.Add(pNetwork);
         pNetwork.gameObject.SetActive(false);
-        //pNetwork.enabled = false;
     }
 
     public void RemovePlayer(PlayerNetwork pNetwork)
@@ -83,7 +88,6 @@ public class GameManager : NetworkBehaviour
 
         for (int i = 0; i < playersAlive.Count; i++)
         {
-            //playersAlive[i].enabled = true;
             playersAlive[i].gameObject.transform.position = new Vector3(i, 0, 0);
             playersAlive[i].gameObject.SetActive(true);
         }
