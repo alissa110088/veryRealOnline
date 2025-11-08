@@ -30,8 +30,6 @@ public class PlayerNetwork : NetworkBehaviour
         base.OnNetworkSpawn();
 
         StartCoroutine(RegisterPlayerNextFrame());
-        if(first && IsOwner)
-                mouse.gameObject.SetActive(true);
     }
 
     private void OnEnable()
@@ -41,6 +39,12 @@ public class PlayerNetwork : NetworkBehaviour
 
         if (!first)
             return;
+
+        if (first && IsOwner)
+        {
+            mouse.gameObject.SetActive(true);
+            Debug.Log("here");
+        }
 
         inputActions = new InputSystem_Actions();
         inputActions.Player.Move.performed += GetDirection;
