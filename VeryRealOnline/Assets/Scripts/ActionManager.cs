@@ -12,4 +12,6 @@ public static class ActionManager
     public static Action<EnumPlayerState, GameObject> GivePlayerRole;
     public static Action onSeekerWin;
     public static Action onHiderWin;
+    public static Action ActivateMovement;
+    public static Action DeactivateMovement;
 }

@@ -74,7 +74,7 @@ public class Hider : NetworkBehaviour
         Vector3 lOrigin = cam.transform.position;
         Vector3 lDirection = cam.transform.forward;
 
-        Debug.DrawRay(lOrigin, lDirection * 5f, Color.red, 0.1f);
+        //Debug.DrawRay(lOrigin, lDirection * 5f, Color.red, 0.1f);
 
 
         if (objectInHand == null)

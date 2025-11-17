@@ -4522,6 +4522,8 @@ MonoBehaviour:
   winCanvas: {fileID: 1881488128}
   seekerWin: {fileID: 1122836270}
   hiderWin: {fileID: 798608520}
+  chatBox: {fileID: 3287977997447088142, guid: f4fd663b4a8212a4ea1f5a21ea4492e4, type: 3}
+  Ui: {fileID: 305085288}
 --- !u!4 &1969012578
 Transform:
   m_ObjectHideFlags: 0

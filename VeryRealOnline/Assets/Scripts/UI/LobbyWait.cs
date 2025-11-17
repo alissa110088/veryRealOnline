@@ -50,10 +50,8 @@ public class LobbyWait : NetworkBehaviour
 
     public void OnPressed()
     {
-
         if (!IsServer)
             return;
-
 
         RemoveUiClientRPC();
     }
@@ -62,8 +60,6 @@ public class LobbyWait : NetworkBehaviour
     private void RemoveUiClientRPC()
     {
         ActionManager.activatePlayer?.Invoke();
-
-
         if (IsServer)
         {
             NetworkObject.Despawn();

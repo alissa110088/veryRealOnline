@@ -52,6 +52,9 @@ public class PlayerNetwork : NetworkBehaviour
         inputActions.Player.Jump.canceled += ctx => shouldJump = false;
         inputActions.Player.Enable();
 
+        ActionManager.ActivateMovement += ActivateInput;
+        ActionManager.DeactivateMovement += DeactivateInput;
+
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
     }
@@ -67,6 +70,18 @@ public class PlayerNetwork : NetworkBehaviour
 
         inputActions.Dispose();
         inputActions.Disable();
+
+        ActionManager.ActivateMovement -= ActivateInput;
+        ActionManager.DeactivateMovement -= DeactivateInput;
+    }
+
+    private void DeactivateInput()
+    {
+        inputActions.Player.Disable();
+    }
+    private void ActivateInput()
+    {
+        inputActions.Player.Enable();
     }
     public override void OnNetworkDespawn()
     {
@@ -83,7 +98,7 @@ public class PlayerNetwork : NetworkBehaviour
 
         Jump();
 
-        if (isGrounded || isOnObject)
+        if (isGrounded)
         {
             direction = direction * moveSpeed;
             rb.linearVelocity = new Vector3(direction.x, rb.linearVelocity.y, direction.z);
@@ -99,6 +114,21 @@ public class PlayerNetwork : NetworkBehaviour
 
         }
 
+        Vector3 lOrigin = Camera.main.transform.position;
+        Vector3 lDirection = -gameObject.transform.up;
+        RaycastHit hit;
+        if (Physics.Raycast(lOrigin, lDirection *2, out hit, 2f, ~7))
+        {
+            Debug.DrawRay(lOrigin, lDirection * 2, Color.green, 0.05f);
+            if (!isGrounded)
+                isGrounded = true;
+        }
+        else if(isGrounded)
+        {
+            Debug.DrawRay(lOrigin, lDirection * 2, Color.red, 0.05f);
+            isGrounded = false;
+        }
+
         Vector3 horizontal = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
         horizontal = Vector3.ClampMagnitude(horizontal, 8f);
         rb.linearVelocity = new Vector3(horizontal.x, rb.linearVelocity.y, horizontal.z);
@@ -111,31 +141,31 @@ public class PlayerNetwork : NetworkBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
-        if (!IsOwner) return;
+        //if (!IsOwner) return;
 
-        if (collision.gameObject.layer == LayerMask.NameToLayer(groundLayerName))
-        {
-            isGrounded = true;
-        }
-        else if (collision.gameObject.layer == LayerMask.NameToLayer(ObstacleLayerName))
-        {
-            isOnObject = true;
-        }
+        //if (collision.gameObject.layer == LayerMask.NameToLayer(groundLayerName))
+        //{
+        //    isGrounded = true;
+        //}
+        //else if (collision.gameObject.layer == LayerMask.NameToLayer(ObstacleLayerName))
+        //{
+        //    isOnObject = true;
+        //}
     }
 
     private void OnCollisionExit(Collision collision)
     {
-        if (!IsOwner) return;
+        //if (!IsOwner) return;
 
-        if (collision.gameObject.layer == LayerMask.NameToLayer(groundLayerName) && isGrounded)
-        {
-            isGrounded = false;
-        }
-        else if (collision.gameObject.layer == LayerMask.NameToLayer(ObstacleLayerName))
-        {
-            //sert que si on touche les deux objets et quon arrete de toucher la sa nous compte
-            isOnObject = false;
-        }
+        //if (collision.gameObject.layer == LayerMask.NameToLayer(groundLayerName) && isGrounded)
+        //{
+        //    isGrounded = false;
+        //}
+        //else if (collision.gameObject.layer == LayerMask.NameToLayer(ObstacleLayerName))
+        //{
+        //    //sert que si on touche les deux objets et quon arrete de toucher la sa nous compte
+        //    isOnObject = false;
+        //}
     }
 
     private void GetDirection(InputAction.CallbackContext ctx)
@@ -152,7 +182,7 @@ public class PlayerNetwork : NetworkBehaviour
     {
         if (!IsOwner) return;
 
-        if ((isGrounded || isOnObject) && shouldJump)
+        if (isGrounded && shouldJump)
         {
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);

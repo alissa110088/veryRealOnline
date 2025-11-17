@@ -19,6 +19,8 @@ public class GameManager : NetworkBehaviour
     [SerializeField] private GameObject winCanvas;
     [SerializeField] private GameObject seekerWin;
     [SerializeField] private GameObject hiderWin;
+    [SerializeField] private GameObject chatBox;
+    [SerializeField] private GameObject Ui;
 
     public static GameManager instance;
 
@@ -85,7 +87,6 @@ public class GameManager : NetworkBehaviour
 
     private void ActivateAllPlayer()
     {
-
         for (int i = 0; i < playersAlive.Count; i++)
         {
             playersAlive[i].gameObject.transform.position = new Vector3(i, 0, 0);
@@ -102,6 +103,10 @@ public class GameManager : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void GetShuffleListServerRpc()
     {
+        GameObject chat = Instantiate(chatBox, Ui.transform);
+        NetworkObject networkObject = chat.GetComponent<NetworkObject>();
+        networkObject.Spawn();
+
         int howMany = Mathf.RoundToInt(playersAlive.Count * ChanceToBeSeeker);
 
         if (howMany == 0 && playersAlive.Count > 1)
