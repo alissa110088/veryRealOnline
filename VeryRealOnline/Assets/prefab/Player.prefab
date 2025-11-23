@@ -19,7 +19,7 @@ GameObject:
   - component: {fileID: 2857883058575590491}
   - component: {fileID: 4561301352292425346}
   - component: {fileID: 8420016430571025698}
-  m_Layer: 2
+  m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -283,7 +283,7 @@ GameObject:
   - component: {fileID: 7364784006578465450}
   - component: {fileID: 3553712408962253843}
   - component: {fileID: 5414058895440963861}
-  m_Layer: 2
+  m_Layer: 7
   m_Name: Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -393,7 +393,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4430705716668789113}
-  m_Layer: 2
+  m_Layer: 7
   m_Name: GroundCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -426,7 +426,7 @@ GameObject:
   - component: {fileID: 2791343290682582653}
   - component: {fileID: 3591575372940958103}
   - component: {fileID: 1183443753690975852}
-  m_Layer: 2
+  m_Layer: 7
   m_Name: RawImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -499,7 +499,7 @@ GameObject:
   - component: {fileID: 2422524633366008073}
   - component: {fileID: 2099066457633379742}
   - component: {fileID: 3615559455832842558}
-  m_Layer: 2
+  m_Layer: 7
   m_Name: Player Tag
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -600,7 +600,7 @@ GameObject:
   - component: {fileID: 3513759648131824354}
   - component: {fileID: 6330986771225610138}
   - component: {fileID: 4863736280396000327}
-  m_Layer: 2
+  m_Layer: 7
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -737,7 +737,7 @@ GameObject:
   - component: {fileID: 4295139708868873102}
   - component: {fileID: 339438158580654871}
   - component: {fileID: 1235119767688589043}
-  m_Layer: 2
+  m_Layer: 7
   m_Name: mouseCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -841,7 +841,7 @@ GameObject:
   - component: {fileID: 5260734575036562878}
   - component: {fileID: 7496159573495249031}
   - component: {fileID: 77912547654730805}
-  m_Layer: 2
+  m_Layer: 7
   m_Name: CameraPlayer
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -1119,7 +1119,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5741410756968504319, guid: d584cdd7fbdc09043884ed4ececd1d98, type: 3}
       propertyPath: m_Layer
-      value: 2
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 5741410756968504319, guid: d584cdd7fbdc09043884ed4ececd1d98, type: 3}
       propertyPath: m_IsActive
@@ -1155,7 +1155,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8937737321206927895, guid: d584cdd7fbdc09043884ed4ececd1d98, type: 3}
       propertyPath: m_Layer
-      value: 2
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:

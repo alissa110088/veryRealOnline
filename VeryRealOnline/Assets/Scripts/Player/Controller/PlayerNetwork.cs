@@ -116,9 +116,11 @@ public class PlayerNetwork : NetworkBehaviour
 
         Vector3 lOrigin = Camera.main.transform.position;
         Vector3 lDirection = -gameObject.transform.up;
+        int mask = ~(1 << 7);
         RaycastHit hit;
-        if (Physics.Raycast(lOrigin, lDirection *2, out hit, 2f, ~7))
+        if (Physics.Raycast(lOrigin, lDirection *2, out hit, 2f, mask))
         {
+            Debug.Log(hit.transform.gameObject.name.ToString());
             Debug.DrawRay(lOrigin, lDirection * 2, Color.green, 0.05f);
             if (!isGrounded)
                 isGrounded = true;
