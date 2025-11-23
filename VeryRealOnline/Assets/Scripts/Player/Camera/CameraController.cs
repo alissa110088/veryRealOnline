@@ -17,14 +17,13 @@ public class CameraController : NetworkBehaviour
 
     private void LateUpdate()
     {
-        if(!IsOwner) return;
+        if (!IsOwner) return;
         rotation.x += Input.GetAxis(xAxis) * sensibilityX;
         rotation.y += (Input.GetAxis(yAxis) * sensibilityY);
         rotation.y = Mathf.Clamp(rotation.y, minDownCamera, maxUpCamera);
-        Quaternion xQuaternion = Quaternion.AngleAxis(rotation.x, Vector2.up);
-        Quaternion yQuaternion = Quaternion.AngleAxis(rotation.y, Vector2.left);
 
-        transform.localRotation = xQuaternion ;
-        camera.transform.localRotation = yQuaternion ;
+        transform.localRotation = Quaternion.Euler(0f, rotation.x, 0f);
+
+        camera.transform.localRotation = Quaternion.Euler(-rotation.y, 0f, 0f);
     }
 }

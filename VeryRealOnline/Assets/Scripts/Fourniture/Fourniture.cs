@@ -1,8 +1,10 @@
+using Unity.Netcode.Components;
 using UnityEngine;
 
 public class Fourniture : MonoBehaviour
 {
     public Rigidbody rb;
+    private NetworkTransform networkTransform;
 
     private void OnEnable()
     {
@@ -19,6 +21,7 @@ public class Fourniture : MonoBehaviour
     {
         if (gameObject != pObject)
             return;
+
         rb.linearVelocity = Vector3.zero;
         rb.useGravity = false;
     }
