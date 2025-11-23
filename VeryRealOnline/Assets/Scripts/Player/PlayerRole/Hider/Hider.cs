@@ -1,3 +1,4 @@
+using System;
 using Unity.Netcode;
 using UnityEditor.Rendering;
 using UnityEngine;
@@ -115,9 +116,22 @@ public class Hider : NetworkBehaviour
             rbObject.useGravity = false;
             objectNetwork = objectInHand.GetComponent<NetworkObject>();
             mouse.texture = red;
+
+            RemoveGravityRPC(objectNetwork.NetworkObjectId);
             RequestOwnershipServerRpc(objectNetwork.NetworkObjectId, NetworkManager.Singleton.LocalClientId);
         }
+    }
 
+    [Rpc(SendTo.Everyone)]
+
+    private void RemoveGravityRPC(ulong objectId)
+    {
+        if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(objectId, out NetworkObject netObj))
+        {
+            Rigidbody rb = netObj.GetComponent<Rigidbody>();
+            if (rb != null)
+                rb.useGravity = false;
+        }
     }
 
     private void LetGo(InputAction.CallbackContext ctx)
@@ -127,10 +141,23 @@ public class Hider : NetworkBehaviour
 
         objectNetwork.RemoveOwnership();
         rbObject.useGravity = true;
+        AddGravityRPC(objectNetwork.NetworkObjectId);
         ActionManager.release.Invoke();
         objectInHand = null;
         canGrabItem = false;
         mouse.texture = green;
+    }
+
+    [Rpc(SendTo.Everyone)]
+
+    private void AddGravityRPC(ulong objectId)
+    {
+        if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(objectId, out NetworkObject netObj))
+        {
+            Rigidbody rb = netObj.GetComponent<Rigidbody>();
+            if (rb != null)
+                rb.useGravity = true;
+        }
     }
 
     private void ChangeAxis(InputAction.CallbackContext ctx)
