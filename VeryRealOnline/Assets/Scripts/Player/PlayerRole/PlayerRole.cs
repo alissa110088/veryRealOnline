@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using TMPro;
+using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerRole : MonoBehaviour
+public class PlayerRole : NetworkBehaviour
 {
     private EnumPlayerState playerRole;
     private string hiderText = "hider";
@@ -36,6 +37,7 @@ public class PlayerRole : MonoBehaviour
         {
             seekerScript.enabled = true;
             gameObject.tag = seekerText;
+            if (!IsOwner) return;
             text.text = seekerText;
             text.color = Color.red;
         }
@@ -43,6 +45,7 @@ public class PlayerRole : MonoBehaviour
         {
             hiderScript.enabled = true;
             gameObject.tag = hiderText;
+            if (!IsOwner) return;
             text.text = hiderText;
             text.color = Color.green;
         }
