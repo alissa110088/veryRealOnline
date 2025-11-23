@@ -238,7 +238,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8460c639912610d40b212f97474cf263, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerRole
-  ShowTopMostFoldoutHeaderGroup: 1
   hiderScript: {fileID: 4561301352292425346}
   seekerScript: {fileID: 8420016430571025698}
   text: {fileID: 4863736280396000327}
