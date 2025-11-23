@@ -13,6 +13,8 @@ public class PlayerRole : NetworkBehaviour
     [SerializeField] private Hider hiderScript;
     [SerializeField] private Seeker seekerScript;
     [SerializeField] private TextMeshProUGUI text;
+    [SerializeField] MeshRenderer meshRenderer;
+    [SerializeField] Material redTexture;
 
     private void OnEnable()
     {
@@ -35,7 +37,9 @@ public class PlayerRole : NetworkBehaviour
     {
         if(playerRole == EnumPlayerState.seeker)
         {
+            hiderScript.enabled = true;
             seekerScript.enabled = true;
+            meshRenderer.material = redTexture;
             gameObject.tag = seekerText;
             if (!IsOwner) return;
             text.text = seekerText;
