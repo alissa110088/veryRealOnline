@@ -8,7 +8,7 @@ public class PlayerRole : NetworkBehaviour
     private EnumPlayerState playerRole;
     private string hiderText = "hider";
     private string seekerText = "seeker";
-
+    private Vector3 pos;
 
     [SerializeField] private Hider hiderScript;
     [SerializeField] private Seeker seekerScript;
@@ -26,11 +26,12 @@ public class PlayerRole : NetworkBehaviour
         ActionManager.GivePlayerRole -= GiveRole;
     }
 
-    private void GiveRole(EnumPlayerState pState, GameObject pPlayer)
+    private void GiveRole(EnumPlayerState pState, GameObject pPlayer, Vector3 pPosition)
     {
         if (pPlayer != gameObject)
             return;
         playerRole = pState;
+        pos = pPosition;
         AttributeRole();
     }
     private void AttributeRole()
@@ -39,19 +40,23 @@ public class PlayerRole : NetworkBehaviour
         {
             hiderScript.enabled = true;
             seekerScript.enabled = true;
-            meshRenderer.material = redTexture;
             gameObject.tag = seekerText;
+            meshRenderer.material = redTexture;
+
             if (!IsOwner) return;
             text.text = seekerText;
             text.color = Color.red;
+            transform.position = pos;
         }
         else if(playerRole == EnumPlayerState.hider)
         {
             hiderScript.enabled = true;
             gameObject.tag = hiderText;
+
             if (!IsOwner) return;
             text.text = hiderText;
             text.color = Color.green;
+            transform.position = pos;
         }
     }
 }

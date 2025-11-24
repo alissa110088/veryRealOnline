@@ -12,6 +12,7 @@ public class PlayerNetwork : NetworkBehaviour
     [SerializeField] private Rigidbody rb;
     [SerializeField] private float jumpForce = 5f;
     [SerializeField] private RawImage mouse;
+    [SerializeField] private GameObject[] bodyNotShow;
     public Vector3 camPos;
 
     private Vector3 direction;
@@ -23,6 +24,8 @@ public class PlayerNetwork : NetworkBehaviour
     private bool shouldJump;
     private bool first;
 
+    private int currentNumPlayer = 0;
+
     private const string groundLayerName = "Ground";
     private const string ObstacleLayerName = "Obstacle";
 
@@ -30,21 +33,15 @@ public class PlayerNetwork : NetworkBehaviour
     {
         base.OnNetworkSpawn();
 
+        if (IsOwner)
+        {
+            mouse.gameObject.SetActive(true);
+        }
         StartCoroutine(RegisterPlayerNextFrame());
     }
 
     private void OnEnable()
     {
-
-        if (!first)
-            return;
-
-        if (first && IsOwner)
-        {
-            mouse.gameObject.SetActive(true);
-            Debug.Log("here");
-        }
-
         inputActions = new InputSystem_Actions();
         inputActions.Player.Move.performed += GetDirection;
         inputActions.Player.Move.canceled += ctx => inputDirection = Vector3.zero;
@@ -52,6 +49,7 @@ public class PlayerNetwork : NetworkBehaviour
         inputActions.Player.Jump.canceled += ctx => shouldJump = false;
         inputActions.Player.Enable();
 
+        NetworkManager.Singleton.OnClientConnectedCallback += Init;
         ActionManager.ActivateMovement += ActivateInput;
         ActionManager.DeactivateMovement += DeactivateInput;
 
@@ -70,6 +68,7 @@ public class PlayerNetwork : NetworkBehaviour
 
         inputActions.Dispose();
         inputActions.Disable();
+
 
         ActionManager.ActivateMovement -= ActivateInput;
         ActionManager.DeactivateMovement -= DeactivateInput;
@@ -139,7 +138,26 @@ public class PlayerNetwork : NetworkBehaviour
     private IEnumerator RegisterPlayerNextFrame()
     {
         yield return null;
+        Debug.Log("addPlayer");
         ActionManager.addPlayer?.Invoke(this);
+        if (IsServer)
+        {
+            yield return new WaitForSeconds(0.05f);
+            Debug.Log("calling all player");
+            ActionManager.activatePlayer.Invoke();
+        }
+    }
+
+    private void Init(ulong id)
+    {
+        if (!IsServer)
+            return;
+            
+        currentNumPlayer += 1;
+        if (currentNumPlayer == LobbyManager.instance.numPlayer)
+        {
+            ActionManager.activatePlayer.Invoke();
+        }
     }
     private void OnCollisionEnter(Collision collision)
     {

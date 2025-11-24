@@ -21,6 +21,10 @@ public class GameManager : NetworkBehaviour
     [SerializeField] private GameObject hiderWin;
     [SerializeField] private GameObject chatBox;
     [SerializeField] private GameObject Ui;
+    [SerializeField] private GameObject lobby;
+    [SerializeField] private GameObject anchorSeeker;
+    [SerializeField] private GameObject anchorHider;
+
 
     public static GameManager instance;
 
@@ -58,7 +62,6 @@ public class GameManager : NetworkBehaviour
     private void AddPlayer(PlayerNetwork pNetwork)
     {
         playersAlive.Add(pNetwork);
-        pNetwork.gameObject.SetActive(false);
     }
 
     public void RemovePlayer(PlayerNetwork pNetwork)
@@ -74,6 +77,12 @@ public class GameManager : NetworkBehaviour
 
         seekerWinRpc();
     }
+    [Rpc(SendTo.Everyone)]
+    private void hideUiRPC()
+    {
+        lobby.SetActive(false);
+    }
+
 
     [Rpc(SendTo.Everyone)]
 
@@ -87,8 +96,10 @@ public class GameManager : NetworkBehaviour
 
     private void ActivateAllPlayer()
     {
+        hideUiRPC();
         for (int i = 0; i < playersAlive.Count; i++)
         {
+            Debug.Log(i);
             playersAlive[i].gameObject.transform.position = new Vector3(i, 0, 0);
             playersAlive[i].gameObject.SetActive(true);
         }
@@ -144,9 +155,9 @@ public class GameManager : NetworkBehaviour
             if (player == null) continue;
 
             if (i < howMany)
-                ActionManager.GivePlayerRole?.Invoke(EnumPlayerState.seeker, player.gameObject);
+                ActionManager.GivePlayerRole?.Invoke(EnumPlayerState.seeker, player.gameObject, anchorSeeker.transform.position);
             else
-                ActionManager.GivePlayerRole?.Invoke(EnumPlayerState.hider, player.gameObject);
+                ActionManager.GivePlayerRole?.Invoke(EnumPlayerState.hider, player.gameObject, anchorHider.transform.position);
 
             i++;
         }
