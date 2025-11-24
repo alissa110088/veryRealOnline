@@ -8,11 +8,11 @@ public class Hider : NetworkBehaviour
 {
     public Camera cam;
 
-    //[SerializeField] private LayerMask objectLayer;
     [SerializeField] private Texture green;
     [SerializeField] private Texture darkGreen;
     [SerializeField] private Texture red;
     [SerializeField] private RawImage mouse;
+    [SerializeField] private LayerMask layerToHit;
 
     private float distanceToGrab = 5f;
     private float SmoothMovementFourniture = 15f;
@@ -74,12 +74,9 @@ public class Hider : NetworkBehaviour
         Vector3 lOrigin = cam.transform.position;
         Vector3 lDirection = cam.transform.forward;
 
-        //Debug.DrawRay(lOrigin, lDirection * 5f, Color.red, 0.1f);
-
-
         if (objectInHand == null)
         {
-            if (Physics.Raycast(lOrigin, lDirection, out hit, distanceToGrab, objectLayer))
+            if (Physics.Raycast(lOrigin, lDirection, out hit, distanceToGrab, layerToHit))
             {
                 focusedObject = hit.transform.gameObject;
                 canGrabItem = true;

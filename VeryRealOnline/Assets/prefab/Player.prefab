@@ -250,6 +250,7 @@ MonoBehaviour:
   text: {fileID: 4863736280396000327}
   meshRenderer: {fileID: 3553712408962253843}
   redTexture: {fileID: 2100000, guid: d78d6cd3137a8824699cde034b4270c0, type: 2}
+  greenTexture: {fileID: 2100000, guid: 720ea100b5a5ea741a0e79cfb3ab65c6, type: 2}
 --- !u!114 &4561301352292425346
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -268,6 +269,9 @@ MonoBehaviour:
   darkGreen: {fileID: 2800000, guid: 520bf478fe841194cb1e2000e8e07f42, type: 3}
   red: {fileID: 2800000, guid: 2ef060cf8c8e12e46a847a51741bbc7f, type: 3}
   mouse: {fileID: 1183443753690975852}
+  layerToHit:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!114 &8420016430571025698
 MonoBehaviour:
   m_ObjectHideFlags: 0
