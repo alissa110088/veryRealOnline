@@ -11,9 +11,11 @@ public class GameManager : NetworkBehaviour
     private List<PlayerNetwork> playersAlive = new List<PlayerNetwork>();
     private List<PlayerNetwork> playersDead = new List<PlayerNetwork>();
 
-    private float ChanceToBeSeeker = 0.2f;
+    private float chanceToBeSeeker = 0.2f;
+    private float second = 60f;
     private bool startTimer;
     private bool chatAlreadySpawned;
+    private string hiderTag = "hider";
 
     [SerializeField] private NetworkVariable<float> time = new NetworkVariable<float>(600f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     [SerializeField] private TextMeshProUGUI text;
@@ -72,7 +74,7 @@ public class GameManager : NetworkBehaviour
 
         foreach (PlayerNetwork lNet in playersAlive)
         {
-            if (lNet.gameObject.CompareTag("hider"))
+            if (lNet.gameObject.CompareTag(hiderTag))
                 return;
         }
 
@@ -123,7 +125,7 @@ public class GameManager : NetworkBehaviour
             chatAlreadySpawned = true;
         }
 
-        int howMany = Mathf.RoundToInt(playersAlive.Count * ChanceToBeSeeker);
+        int howMany = Mathf.RoundToInt(playersAlive.Count * chanceToBeSeeker);
 
         if (howMany == 0 && playersAlive.Count > 1)
         {
@@ -174,8 +176,8 @@ public class GameManager : NetworkBehaviour
     private void TimerServerRpc()
     {
         time.Value -= Time.deltaTime;
-        int lMinute = Mathf.FloorToInt(time.Value / 60f);
-        int lSeconde = Mathf.FloorToInt(time.Value % 60f);
+        int lMinute = Mathf.FloorToInt(time.Value / second);
+        int lSeconde = Mathf.FloorToInt(time.Value % second);
 
         UpdateTextRpc(lMinute, lSeconde);
     }

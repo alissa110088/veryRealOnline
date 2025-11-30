@@ -11,15 +11,16 @@ public class Seeker : NetworkBehaviour
     [SerializeField] private Texture green;
     [SerializeField] private Texture darkGreen;
     [SerializeField] private Texture red;
+    [SerializeField] private Camera cam;
 
+    private Spectate spectate;
     private LayerMask playerLayer;
     private GameObject focusedObject;
     private InputSystem_Actions inputActions;
     private bool canKill;
-
-    [SerializeField] private Camera cam;
-
-    private Spectate spectate;
+    private string player = "Player";
+    private string hider = "hider";
+    private float raycastLenght = 5f;
 
     public override void OnNetworkSpawn()
     {
@@ -30,7 +31,7 @@ public class Seeker : NetworkBehaviour
 
     private void OnEnable()
     {
-        playerLayer = LayerMask.GetMask("Player");
+        playerLayer = LayerMask.GetMask(player);
         if (IsOwner)
         {
             inputActions.Player.Enable();
@@ -57,11 +58,10 @@ public class Seeker : NetworkBehaviour
         Vector3 lDirection = cam.transform.forward;
 
         RaycastHit hit;
-        Debug.DrawRay(lOrigin, lDirection * 5f, Color.red, 0.1f);
 
-        if (Physics.Raycast(lOrigin, lDirection, out hit, 5f, playerLayer))
+        if (Physics.Raycast(lOrigin, lDirection, out hit, raycastLenght, playerLayer))
         {
-            if (!hit.transform.gameObject.CompareTag("hider"))
+            if (!hit.transform.gameObject.CompareTag(hider))
                 return;
 
             mouse.texture = darkGreen;

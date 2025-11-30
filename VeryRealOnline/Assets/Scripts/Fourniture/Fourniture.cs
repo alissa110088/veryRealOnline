@@ -4,7 +4,6 @@ using UnityEngine;
 public class Fourniture : MonoBehaviour
 {
     public Rigidbody rb;
-    private NetworkTransform networkTransform;
 
     private void OnEnable()
     {

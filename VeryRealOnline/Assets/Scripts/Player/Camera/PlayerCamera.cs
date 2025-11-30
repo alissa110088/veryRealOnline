@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class PlayerCamera : NetworkBehaviour
 {
-    [SerializeField] Camera camera;
-    [SerializeField] AudioListener audioListener;
+    [SerializeField] private Camera camera;
+    [SerializeField] private AudioListener audioListener;
     void Start()
     {
         if (IsOwner)

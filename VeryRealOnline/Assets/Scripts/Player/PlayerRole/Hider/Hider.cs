@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class Hider : NetworkBehaviour
 {
-    public Camera cam;
 
     [SerializeField] private Texture green;
     [SerializeField] private Texture darkGreen;
@@ -14,9 +13,9 @@ public class Hider : NetworkBehaviour
     [SerializeField] private RawImage mouse;
     [SerializeField] private LayerMask layerToHit;
 
+    public Camera cam;
     private float distanceToGrab = 5f;
     private float SmoothMovementFourniture = 15f;
-    private LayerMask objectLayer;
     private InputSystem_Actions inputActions;
     private GameObject objectInHand = null;
     private float grabDistance;
@@ -24,15 +23,12 @@ public class Hider : NetworkBehaviour
     private RaycastHit hit;
     private Rigidbody rbObject;
     private NetworkObject objectNetwork;
-    private GameObject focusedObject;
     private Vector3 lCurrentAxis = new Vector3(0, 0, 1);
-
+    private float rotateAngleAdd = 1000;
 
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
-
-        objectLayer = LayerMask.GetMask("Obstacle");
 
         inputActions = new InputSystem_Actions();
 
@@ -78,7 +74,6 @@ public class Hider : NetworkBehaviour
         {
             if (Physics.Raycast(lOrigin, lDirection, out hit, distanceToGrab, layerToHit))
             {
-                focusedObject = hit.transform.gameObject;
                 canGrabItem = true;
                 mouse.texture = darkGreen;
             }
@@ -102,8 +97,6 @@ public class Hider : NetworkBehaviour
 
         if (canGrabItem)
         {
-            focusedObject = null;
-
             grabDistance = Vector3.Distance(Camera.main.transform.position, hit.point);
             objectInHand = hit.transform.gameObject;
             ActionManager.grab.Invoke(objectInHand);
@@ -172,7 +165,7 @@ public class Hider : NetworkBehaviour
 
         Vector2 lAngle = ctx.ReadValue<Vector2>();
 
-        Vector3 lFinalAngle = lCurrentAxis * lAngle.y * 1000 * Time.deltaTime;
+        Vector3 lFinalAngle = lCurrentAxis * lAngle.y * rotateAngleAdd * Time.deltaTime;
 
         lFinalAngle = new Vector3(lCurrentAxis.x * lFinalAngle.x, lCurrentAxis.y * lFinalAngle.y, lCurrentAxis.z * lFinalAngle.z);
         objectInHand.transform.Rotate(lFinalAngle, Space.Self);

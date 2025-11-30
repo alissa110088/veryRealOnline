@@ -6,18 +6,21 @@ using Unity.Services.Core;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LobbyManager : MonoBehaviour
 {
     public static LobbyManager instance;
-    [SerializeField] TMP_InputField lobbyCodeTextField;
-    [SerializeField] TMP_InputField playerNameTextField;
-    [SerializeField] Transform startGameButtonTransform;
-    [SerializeField] TextMeshProUGUI textMeshProUGUI;
+    [SerializeField] private TMP_InputField lobbyCodeTextField;
+    [SerializeField] private TMP_InputField playerNameTextField;
+    [SerializeField] private Transform startGameButtonTransform;
+    [SerializeField] private TextMeshProUGUI textMeshProUGUI;
+    [SerializeField] private GameObject buttonJoin;
+    [SerializeField] private GameObject buttonCreate;
     float heartBeatTimer;
 
-    Lobby hostLobby;
-    Lobby joinedLobby;
+    private Lobby hostLobby;
+    private Lobby joinedLobby;
     readonly string keyGameMode = "GameMode";
     readonly string keyMap = "Map";
     readonly string keyPlayerName = "PlayerName";
@@ -139,6 +142,9 @@ public class LobbyManager : MonoBehaviour
 
             startGameButtonTransform.gameObject.SetActive(true);
             textMeshProUGUI.gameObject.SetActive(true);
+
+            buttonJoin.SetActive(false);
+            buttonCreate.SetActive(false);
 
             Debug.Log("Lobby Created      Lobby Name: " + lobby.Name + "      Max Player: " + maxPlayers + "      Lobby Id: " + lobby.Id + "      LobbyCode: " + lobby.LobbyCode + "      Game Mode: " + lobby.Data[keyGameMode].Value);
             PrintPlayers(hostLobby);
@@ -271,6 +277,9 @@ public class LobbyManager : MonoBehaviour
             textMeshProUGUI.gameObject.SetActive(true);
 
             Debug.Log("Quick Joined Lobby");
+
+            buttonJoin.SetActive(false);
+            buttonCreate.SetActive(false);
 
             PrintPlayers(lobby);
         }

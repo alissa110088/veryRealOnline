@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class ConsoleUI : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI text;
+    [SerializeField] private TextMeshProUGUI text;
     [SerializeField] int maxLineCount = 10;
 
     int lineCount = 0;

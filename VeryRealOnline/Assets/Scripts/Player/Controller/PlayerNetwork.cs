@@ -26,9 +26,10 @@ public class PlayerNetwork : NetworkBehaviour
 
     private int currentNumPlayer = 0;
 
-    private const string groundLayerName = "Ground";
-    private const string ObstacleLayerName = "Obstacle";
-
+    private float looseSpeed = .7f;
+    private float speed = 5f;
+    private float maxSpeed = 8f;
+    private float waitBegin = .05f;
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
@@ -77,7 +78,6 @@ public class PlayerNetwork : NetworkBehaviour
 
     private void DeactivateInput()
     {
-        Debug.Log("should deactivate");
         inputActions.Disable();
     }
     private void ActivateInput()
@@ -87,7 +87,6 @@ public class PlayerNetwork : NetworkBehaviour
     public override void OnNetworkDespawn()
     {
         base.OnNetworkDespawn();
-
     }
 
     private void FixedUpdate()
@@ -106,11 +105,11 @@ public class PlayerNetwork : NetworkBehaviour
         }
         else
         {
-            direction = direction * moveSpeed * .7f;
+            direction = direction * moveSpeed * looseSpeed;
             rb.linearVelocity = new Vector3(
-                Mathf.Lerp(rb.linearVelocity.x, direction.x, Time.fixedDeltaTime * 5f),
+                Mathf.Lerp(rb.linearVelocity.x, direction.x, Time.fixedDeltaTime * speed),
                 rb.linearVelocity.y,
-                Mathf.Lerp(rb.linearVelocity.z, direction.z, Time.fixedDeltaTime * 5f)
+                Mathf.Lerp(rb.linearVelocity.z, direction.z, Time.fixedDeltaTime * speed)
             );
 
         }
@@ -119,32 +118,28 @@ public class PlayerNetwork : NetworkBehaviour
         Vector3 lDirection = -gameObject.transform.up;
         int mask = ~(1 << 7);
         RaycastHit hit;
-        if (Physics.Raycast(lOrigin, lDirection *2, out hit, 2f, mask))
+        if (Physics.Raycast(lOrigin, lDirection, out hit, 2f, mask))
         {
-            Debug.DrawRay(lOrigin, lDirection * 2, Color.green, 0.05f);
             if (!isGrounded)
                 isGrounded = true;
         }
         else if(isGrounded)
         {
-            Debug.DrawRay(lOrigin, lDirection * 2, Color.red, 0.05f);
             isGrounded = false;
         }
 
         Vector3 horizontal = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
-        horizontal = Vector3.ClampMagnitude(horizontal, 8f);
+        horizontal = Vector3.ClampMagnitude(horizontal, maxSpeed);
         rb.linearVelocity = new Vector3(horizontal.x, rb.linearVelocity.y, horizontal.z);
     }
 
     private IEnumerator RegisterPlayerNextFrame()
     {
         yield return null;
-        Debug.Log("addPlayer");
         ActionManager.addPlayer?.Invoke(this);
         if (IsServer)
         {
-            yield return new WaitForSeconds(0.05f);
-            Debug.Log("calling all player");
+            yield return new WaitForSeconds(waitBegin);
             ActionManager.activatePlayer.Invoke();
         }
     }
@@ -159,34 +154,6 @@ public class PlayerNetwork : NetworkBehaviour
         {
             ActionManager.activatePlayer.Invoke();
         }
-    }
-    private void OnCollisionEnter(Collision collision)
-    {
-        //if (!IsOwner) return;
-
-        //if (collision.gameObject.layer == LayerMask.NameToLayer(groundLayerName))
-        //{
-        //    isGrounded = true;
-        //}
-        //else if (collision.gameObject.layer == LayerMask.NameToLayer(ObstacleLayerName))
-        //{
-        //    isOnObject = true;
-        //}
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        //if (!IsOwner) return;
-
-        //if (collision.gameObject.layer == LayerMask.NameToLayer(groundLayerName) && isGrounded)
-        //{
-        //    isGrounded = false;
-        //}
-        //else if (collision.gameObject.layer == LayerMask.NameToLayer(ObstacleLayerName))
-        //{
-        //    //sert que si on touche les deux objets et quon arrete de toucher la sa nous compte
-        //    isOnObject = false;
-        //}
     }
 
     private void GetDirection(InputAction.CallbackContext ctx)

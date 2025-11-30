@@ -23564,6 +23564,8 @@ MonoBehaviour:
   playerNameTextField: {fileID: 0}
   startGameButtonTransform: {fileID: 406618480}
   textMeshProUGUI: {fileID: 742522080}
+  buttonJoin: {fileID: 1169145437}
+  buttonCreate: {fileID: 1771274221}
   numPlayer: 0
 --- !u!4 &779001754
 Transform:
