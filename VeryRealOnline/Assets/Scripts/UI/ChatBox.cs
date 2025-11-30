@@ -11,25 +11,32 @@ public class ChatBox : NetworkBehaviour
     [SerializeField] private TMP_InputField inputField;
 
     private int index = 0;
+    private int numMessageBeforeUp = 6;
+    private float upIndex = 13f;
     private InputSystem_Actions inputActions;
 
     private void Start()
     {
         inputActions = new InputSystem_Actions();
         inputActions.Player.Enable();
-        inputActions.Player.chat.performed += FocusOnChatBox;
+        inputActions.Player.chat.started += FocusOnChatBox;
+    }
+
+    private void OnDestroy()
+    {
+        inputActions.Player.chat.started -= FocusOnChatBox;
     }
 
     private void FocusOnChatBox(InputAction.CallbackContext ctx)
     {
-        EventSystem.current.SetSelectedGameObject(inputField.gameObject, null);
+        inputField.Select();
+        inputField.ActivateInputField();
         inputField.OnPointerClick(null);
         ActionManager.DeactivateMovement.Invoke();
     }
 
     public void OnWritten()
     {
-        Debug.Log("called");
         DisplayTextRPC(inputField.text);
         ActionManager.ActivateMovement.Invoke();
         inputField.text = "";
@@ -40,9 +47,9 @@ public class ChatBox : NetworkBehaviour
     {
         textChat.text += "\n" + pText;
         index += 1;
-        if(index > 6)
+        if(index > numMessageBeforeUp)
         {
-            textChat.transform.position += new Vector3(0, 10,0);
+            textChat.transform.position += new Vector3(0, upIndex,0);
         }
     }
 }

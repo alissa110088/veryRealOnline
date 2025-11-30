@@ -69,6 +69,7 @@ public class PlayerNetwork : NetworkBehaviour
         inputActions.Dispose();
         inputActions.Disable();
 
+        NetworkManager.Singleton.OnClientConnectedCallback -= Init;
 
         ActionManager.ActivateMovement -= ActivateInput;
         ActionManager.DeactivateMovement -= DeactivateInput;
@@ -76,11 +77,12 @@ public class PlayerNetwork : NetworkBehaviour
 
     private void DeactivateInput()
     {
-        inputActions.Player.Disable();
+        Debug.Log("should deactivate");
+        inputActions.Disable();
     }
     private void ActivateInput()
     {
-        inputActions.Player.Enable();
+        inputActions.Enable();
     }
     public override void OnNetworkDespawn()
     {
@@ -119,7 +121,6 @@ public class PlayerNetwork : NetworkBehaviour
         RaycastHit hit;
         if (Physics.Raycast(lOrigin, lDirection *2, out hit, 2f, mask))
         {
-            Debug.Log(hit.transform.gameObject.name.ToString());
             Debug.DrawRay(lOrigin, lDirection * 2, Color.green, 0.05f);
             if (!isGrounded)
                 isGrounded = true;

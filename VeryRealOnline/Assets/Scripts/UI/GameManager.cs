@@ -13,8 +13,9 @@ public class GameManager : NetworkBehaviour
 
     private float ChanceToBeSeeker = 0.2f;
     private bool startTimer;
+    private bool chatAlreadySpawned;
 
-    [SerializeField] private NetworkVariable<float> time = new NetworkVariable<float>(600f ,NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    [SerializeField] private NetworkVariable<float> time = new NetworkVariable<float>(600f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     [SerializeField] private TextMeshProUGUI text;
     [SerializeField] private GameObject winCanvas;
     [SerializeField] private GameObject seekerWin;
@@ -114,9 +115,13 @@ public class GameManager : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void GetShuffleListServerRpc()
     {
-        GameObject chat = Instantiate(chatBox, Ui.transform);
-        NetworkObject networkObject = chat.GetComponent<NetworkObject>();
-        networkObject.Spawn();
+        if (!chatAlreadySpawned)
+        {
+            GameObject chat = Instantiate(chatBox, Ui.transform);
+            NetworkObject networkObject = chat.GetComponent<NetworkObject>();
+            networkObject.Spawn();
+            chatAlreadySpawned = true;
+        }
 
         int howMany = Mathf.RoundToInt(playersAlive.Count * ChanceToBeSeeker);
 

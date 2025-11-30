@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using TMPro;
+using Unity.Netcode;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
 using Unity.Services.Lobbies;
@@ -12,6 +13,7 @@ public class LobbyManager : MonoBehaviour
     [SerializeField] TMP_InputField lobbyCodeTextField;
     [SerializeField] TMP_InputField playerNameTextField;
     [SerializeField] Transform startGameButtonTransform;
+    [SerializeField] TextMeshProUGUI textMeshProUGUI;
     float heartBeatTimer;
 
     Lobby hostLobby;
@@ -23,6 +25,7 @@ public class LobbyManager : MonoBehaviour
     float lobbyUpdateTimer;
     string playerName;
     public int numPlayer;
+    private int previousPlayerCount = 0;
 
     void Awake()
     {
@@ -81,6 +84,13 @@ public class LobbyManager : MonoBehaviour
                 Lobby lobby = await LobbyService.Instance.GetLobbyAsync(joinedLobby.Id);
                 joinedLobby = lobby;
 
+                int currentPlayerCount = joinedLobby.Players.Count;
+                if (currentPlayerCount != previousPlayerCount)
+                {
+                    previousPlayerCount = currentPlayerCount;
+                    ChangeTextPlayerConnected(currentPlayerCount);
+                }
+
                 if (joinedLobby.Data[keyStartGameRelayCode].Value != "0")
                 {
                     if (!IsLobbyHost())
@@ -128,6 +138,7 @@ public class LobbyManager : MonoBehaviour
             joinedLobby = hostLobby;
 
             startGameButtonTransform.gameObject.SetActive(true);
+            textMeshProUGUI.gameObject.SetActive(true);
 
             Debug.Log("Lobby Created      Lobby Name: " + lobby.Name + "      Max Player: " + maxPlayers + "      Lobby Id: " + lobby.Id + "      LobbyCode: " + lobby.LobbyCode + "      Game Mode: " + lobby.Data[keyGameMode].Value);
             PrintPlayers(hostLobby);
@@ -144,6 +155,10 @@ public class LobbyManager : MonoBehaviour
         ListLobbies();
     }
 
+    private void ChangeTextPlayerConnected(int pNumPlayer)
+    {
+        textMeshProUGUI.text = pNumPlayer.ToString() + " Player Connected";
+    }
     async void ListLobbies()
     {
         try
@@ -252,6 +267,8 @@ public class LobbyManager : MonoBehaviour
 
             Lobby lobby = await LobbyService.Instance.QuickJoinLobbyAsync(quickJoinLobbyOptions);
             joinedLobby = lobby;
+
+            textMeshProUGUI.gameObject.SetActive(true);
 
             Debug.Log("Quick Joined Lobby");
 

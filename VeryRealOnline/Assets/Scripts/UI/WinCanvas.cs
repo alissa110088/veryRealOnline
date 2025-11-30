@@ -1,4 +1,5 @@
 using Unity.Netcode;
+using Unity.Services.Authentication;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -11,7 +12,12 @@ public class WinCanvas : MonoBehaviour
     }
     public void OnPressed()
     {
+        gameObject.SetActive(false);
         NetworkManager.Singleton.Shutdown();
+
+        if (AuthenticationService.Instance.IsSignedIn)
+            AuthenticationService.Instance.SignOut();
+
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
