@@ -1,4 +1,3 @@
-using System;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -67,6 +66,11 @@ public class Hider : NetworkBehaviour
             MoveFurniture();
         }
 
+        CheckCanGrab();
+    }
+
+    private void CheckCanGrab()
+    {
         Vector3 lOrigin = cam.transform.position;
         Vector3 lDirection = cam.transform.forward;
 
@@ -77,17 +81,12 @@ public class Hider : NetworkBehaviour
                 canGrabItem = true;
                 mouse.texture = darkGreen;
             }
-            else
+            else if (canGrabItem)
             {
-                if (canGrabItem)
-                {
-                    canGrabItem = false;
-                    if (mouse.texture != green)
-                        mouse.texture = green;
-                }
+                canGrabItem = false;
+                mouse.texture = green;
             }
         }
-
     }
 
     private void GetFurniture(InputAction.CallbackContext ctx)
@@ -151,11 +150,11 @@ public class Hider : NetworkBehaviour
 
     private void ChangeAxis(InputAction.CallbackContext ctx)
     {
-        if (lCurrentAxis.x != 0)
+        if (lCurrentAxis.x != 0f)
             lCurrentAxis = Vector3.up;
-        else if (lCurrentAxis.y != 0)
+        else if (lCurrentAxis.y != 0f)
             lCurrentAxis = Vector3.forward;
-        else if (lCurrentAxis.z != 0)
+        else if (lCurrentAxis.z != 0f)
             lCurrentAxis = Vector3.right;
     }
 

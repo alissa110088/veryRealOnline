@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
 using TMPro;
 using Unity.Netcode;
 using Unity.VisualScripting;
@@ -103,7 +102,7 @@ public class GameManager : NetworkBehaviour
         for (int i = 0; i < playersAlive.Count; i++)
         {
             Debug.Log(i);
-            playersAlive[i].gameObject.transform.position = new Vector3(i, 0, 0);
+            playersAlive[i].gameObject.transform.position = new Vector3(i, 0f, 0f);
             playersAlive[i].gameObject.SetActive(true);
         }
         foreach (PlayerNetwork network in playersAlive)

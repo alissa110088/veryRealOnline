@@ -1,9 +1,7 @@
-using System.Globalization;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using static UnityEngine.GraphicsBuffer;
 
 public class Seeker : NetworkBehaviour
 {
@@ -13,7 +11,6 @@ public class Seeker : NetworkBehaviour
     [SerializeField] private Texture red;
     [SerializeField] private Camera cam;
 
-    private Spectate spectate;
     private LayerMask playerLayer;
     private GameObject focusedObject;
     private InputSystem_Actions inputActions;

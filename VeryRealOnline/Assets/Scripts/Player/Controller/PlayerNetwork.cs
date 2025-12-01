@@ -1,18 +1,22 @@
+using DG.Tweening;
 using System.Collections;
-using Unity.Collections;
 using Unity.Netcode;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class PlayerNetwork : NetworkBehaviour
 {
+    [SerializeField] private float sprintSpeed = 1.0f;
     [SerializeField] private float moveSpeed = 10f;
     [SerializeField] private Rigidbody rb;
     [SerializeField] private float jumpForce = 5f;
     [SerializeField] private RawImage mouse;
     [SerializeField] private GameObject[] bodyNotShow;
+    [SerializeField] private Slider sprintBar;
+    [SerializeField] private Camera cam;
+    [SerializeField] private float sprintLoose = 1f;
+    [SerializeField] private GameObject sliderCanvas;
     public Vector3 camPos;
 
     private Vector3 direction;
@@ -20,16 +24,24 @@ public class PlayerNetwork : NetworkBehaviour
     private Vector3 inputDirection;
 
     private bool isGrounded;
-    private bool isOnObject;
     private bool shouldJump;
     private bool first;
+    private bool isSprinting;
+    private bool lockSprint;
 
     private int currentNumPlayer = 0;
 
     private float looseSpeed = .7f;
-    private float speed = 5f;
-    private float maxSpeed = 8f;
+    private float speed = 3.5f;
+    private float sprintSpeedMultipliyer = 1.5f;
+    private float maxSpeed = 30f;
     private float waitBegin = .05f;
+    private float baseFov = 60f;
+    private float sprintFov = 80f;
+    private float tweenFov = .3f;
+    private float upSprint = .1f;
+    private float minToSprint = .3f;
+
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
@@ -37,6 +49,7 @@ public class PlayerNetwork : NetworkBehaviour
         if (IsOwner)
         {
             mouse.gameObject.SetActive(true);
+            sliderCanvas.SetActive(true);
         }
         StartCoroutine(RegisterPlayerNextFrame());
     }
@@ -89,31 +102,37 @@ public class PlayerNetwork : NetworkBehaviour
         base.OnNetworkDespawn();
     }
 
+    private void Update()
+    {
+        if (!IsOwner) return;
+
+        SprintCheck();
+    }
+
     private void FixedUpdate()
     {
         if (!IsOwner) return;
 
-
         direction = transform.forward * inputDirection.z + transform.right * inputDirection.x;
 
         Jump();
+        ApplyMove();
+        CheckGround();
+    }
 
-        if (isGrounded)
-        {
-            direction = direction * moveSpeed;
-            rb.linearVelocity = new Vector3(direction.x, rb.linearVelocity.y, direction.z);
-        }
-        else
-        {
-            direction = direction * moveSpeed * looseSpeed;
-            rb.linearVelocity = new Vector3(
-                Mathf.Lerp(rb.linearVelocity.x, direction.x, Time.fixedDeltaTime * speed),
-                rb.linearVelocity.y,
-                Mathf.Lerp(rb.linearVelocity.z, direction.z, Time.fixedDeltaTime * speed)
-            );
+    private void ApplyMove()
+    {
+        direction = direction * moveSpeed * sprintSpeed;
+        direction = Vector3.ClampMagnitude(direction, maxSpeed);
+        rb.linearVelocity = new Vector3(
+            Mathf.Lerp(rb.linearVelocity.x, direction.x, Time.fixedDeltaTime * speed),
+            rb.linearVelocity.y,
+            Mathf.Lerp(rb.linearVelocity.z, direction.z, Time.fixedDeltaTime * speed)
+        );
+    }
 
-        }
-
+    private void CheckGround()
+    {
         Vector3 lOrigin = Camera.main.transform.position;
         Vector3 lDirection = -gameObject.transform.up;
         int mask = ~(1 << 7);
@@ -121,16 +140,16 @@ public class PlayerNetwork : NetworkBehaviour
         if (Physics.Raycast(lOrigin, lDirection, out hit, 2f, mask))
         {
             if (!isGrounded)
+            {
                 isGrounded = true;
+                sprintSpeed = 1;
+            }
         }
-        else if(isGrounded)
+        else if (isGrounded)
         {
             isGrounded = false;
+            sprintSpeed = looseSpeed;
         }
-
-        Vector3 horizontal = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
-        horizontal = Vector3.ClampMagnitude(horizontal, maxSpeed);
-        rb.linearVelocity = new Vector3(horizontal.x, rb.linearVelocity.y, horizontal.z);
     }
 
     private IEnumerator RegisterPlayerNextFrame()
@@ -143,12 +162,16 @@ public class PlayerNetwork : NetworkBehaviour
             ActionManager.activatePlayer.Invoke();
         }
     }
+    private void ChangeFov(float newFov = 100f, float transitionDuration = 0.5f)
+    {
+        DOTween.To(() => cam.fieldOfView, x => cam.fieldOfView = x, newFov, transitionDuration);
+    }
 
     private void Init(ulong id)
     {
         if (!IsServer)
             return;
-            
+
         currentNumPlayer += 1;
         if (currentNumPlayer == LobbyManager.instance.numPlayer)
         {
@@ -164,6 +187,40 @@ public class PlayerNetwork : NetworkBehaviour
         inputDirection = ctx.ReadValue<Vector2>();
         inputDirection = new Vector3(inputDirection.x, 0f, inputDirection.y);
         inputDirection = inputDirection.normalized;
+    }
+
+    private void SprintCheck()
+    {
+        if (sprintBar.value <= 0.01f)
+            lockSprint = true;
+
+        if (lockSprint && sprintBar.value >= minToSprint)
+            lockSprint = false;
+
+        if (inputActions.Player.Sprint.IsPressed() && sprintBar.value - sprintLoose * Time.deltaTime >= 0f && !lockSprint)
+        {
+            sprintBar.value -= sprintLoose * Time.deltaTime;
+
+            if (sprintSpeed != sprintSpeedMultipliyer)
+            {
+                ChangeFov(sprintFov, tweenFov);
+                sprintSpeed = sprintSpeedMultipliyer;
+                isSprinting = true;
+            }
+        }
+        else
+        {
+            if (isSprinting)
+            {
+                ChangeFov(baseFov, tweenFov);
+                isSprinting = false;
+                sprintSpeed = 1f;
+            }
+            if (sprintBar.value != 1f)
+            {
+                sprintBar.value += upSprint * Time.deltaTime;
+            }
+        }
     }
 
     private void Jump()

@@ -1,7 +1,4 @@
-﻿using Unity.Netcode;
-using Unity.Netcode.Components;
-using Unity.VisualScripting;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class SetUpFourniture : MonoBehaviour
 {

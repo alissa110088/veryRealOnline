@@ -1,9 +1,7 @@
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.Windows;
 
 public class ChatBox : NetworkBehaviour
 {
@@ -49,7 +47,7 @@ public class ChatBox : NetworkBehaviour
         index += 1;
         if(index > numMessageBeforeUp)
         {
-            textChat.transform.position += new Vector3(0, upIndex,0);
+            textChat.transform.position += new Vector3(0f, upIndex,0f);
         }
     }
 }

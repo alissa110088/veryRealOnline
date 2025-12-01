@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class Spectate : NetworkBehaviour
 {
-    private int currentPosition = -1;
     private bool dead;
 
     [SerializeField] private PlayerNetwork playerNetwork;
