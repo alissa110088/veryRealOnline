@@ -8,14 +8,14 @@ using UnityEngine.UI;
 public class PlayerNetwork : NetworkBehaviour
 {
     [SerializeField] private float sprintSpeed = 1.0f;
-    [SerializeField] private float moveSpeed = 10f;
+    [SerializeField] private float moveSpeed = 4f;
     [SerializeField] private Rigidbody rb;
     [SerializeField] private float jumpForce = 5f;
     [SerializeField] private RawImage mouse;
     [SerializeField] private GameObject[] bodyNotShow;
     [SerializeField] private Slider sprintBar;
     [SerializeField] private Camera cam;
-    [SerializeField] private float sprintLoose = 1f;
+    [SerializeField] private float sprintLoose = 0.2f;
     [SerializeField] private GameObject sliderCanvas;
     public Vector3 camPos;
 
@@ -31,8 +31,6 @@ public class PlayerNetwork : NetworkBehaviour
 
     private int currentNumPlayer = 0;
 
-    private float looseSpeed = .7f;
-    private float speed = 3.5f;
     private float sprintSpeedMultipliyer = 1.5f;
     private float maxSpeed = 30f;
     private float waitBegin = .05f;
@@ -124,11 +122,7 @@ public class PlayerNetwork : NetworkBehaviour
     {
         direction = direction * moveSpeed * sprintSpeed;
         direction = Vector3.ClampMagnitude(direction, maxSpeed);
-        rb.linearVelocity = new Vector3(
-            Mathf.Lerp(rb.linearVelocity.x, direction.x, Time.fixedDeltaTime * speed),
-            rb.linearVelocity.y,
-            Mathf.Lerp(rb.linearVelocity.z, direction.z, Time.fixedDeltaTime * speed)
-        );
+        rb.linearVelocity = new Vector3(direction.x, rb.linearVelocity.y, direction.z);
     }
 
     private void CheckGround()
@@ -148,7 +142,6 @@ public class PlayerNetwork : NetworkBehaviour
         else if (isGrounded)
         {
             isGrounded = false;
-            sprintSpeed = looseSpeed;
         }
     }
 
@@ -227,8 +220,10 @@ public class PlayerNetwork : NetworkBehaviour
     {
         if (!IsOwner) return;
 
+        Debug.Log(shouldJump);
         if (isGrounded && shouldJump)
         {
+            Debug.Log("shouldJump");
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }

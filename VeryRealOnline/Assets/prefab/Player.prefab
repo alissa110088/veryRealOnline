@@ -198,7 +198,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   ShowTopMostFoldoutHeaderGroup: 1
   sprintSpeed: 1
-  moveSpeed: 10
+  moveSpeed: 7
   rb: {fileID: 4013627882963081048}
   jumpForce: 7
   mouse: {fileID: 1183443753690975852}
@@ -210,9 +210,9 @@ MonoBehaviour:
   - {fileID: 8098757386808127691}
   sprintBar: {fileID: 8452682817333563565}
   cam: {fileID: 8388049688777869280}
-  sprintLoose: 1
+  sprintLoose: 0.5
   sliderCanvas: {fileID: 377641708559036802}
-  camPos: {x: 0.048, y: 0.649, z: 0.025}
+  camPos: {x: 0.048, y: 0.649, z: 0.358}
 --- !u!114 &4271655008237625298
 MonoBehaviour:
   m_ObjectHideFlags: 0

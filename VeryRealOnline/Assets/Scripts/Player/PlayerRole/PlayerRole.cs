@@ -51,6 +51,7 @@ public class PlayerRole : NetworkBehaviour
         else if(playerRole == EnumPlayerState.hider)
         {
             hiderScript.enabled = true;
+            seekerScript.enabled = false;
             gameObject.tag = hiderText;
             meshRenderer.material = greenTexture;
 
