@@ -1,3 +1,5 @@
+using NUnit.Framework;
+using System.Collections.Generic;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
@@ -11,7 +13,9 @@ public class ChatBox : NetworkBehaviour
     private int index = 0;
     private int numMessageBeforeUp = 6;
     private float upIndex = 13f;
+
     private InputSystem_Actions inputActions;
+    private List<string> messages = new List<string>();
 
     private void Start()
     {
@@ -43,11 +47,21 @@ public class ChatBox : NetworkBehaviour
     [Rpc(SendTo.Everyone)]
     private void DisplayTextRPC(string pText)
     {
-        textChat.text += "\n" + pText;
+        messages.Add(pText);
         index += 1;
         if(index > numMessageBeforeUp)
         {
-            textChat.transform.position += new Vector3(0f, upIndex,0f);
+            messages.RemoveAt(0);
+        }
+        UpdateText();
+    }
+
+    private void UpdateText()
+    {
+        textChat.text = "";
+        for (int i = 0; i < messages.Count; i++)
+        {
+            textChat.text += "\n" + messages[i];
         }
     }
 }

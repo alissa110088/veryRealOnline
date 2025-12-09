@@ -47,7 +47,8 @@ public class GameManager : NetworkBehaviour
         if (!startTimer)
             return;
 
-        TimerServerRpc();
+        if(IsServer)
+        TimerServer();
     }
     public override void OnNetworkSpawn()
     {
@@ -171,8 +172,7 @@ public class GameManager : NetworkBehaviour
         startTimer = true;
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    private void TimerServerRpc()
+    private void TimerServer()
     {
         time.Value -= Time.deltaTime;
         int lMinute = Mathf.FloorToInt(time.Value / second);

@@ -4,8 +4,8 @@ using UnityEngine;
 public class CameraController : NetworkBehaviour
 {
     [SerializeField] private Camera camera;
-    [SerializeField] private float sensibilityX = 10f;
-    [SerializeField] private float sensibilityY = 5f;
+    [SerializeField] private float sensibilityX = 2f;
+    [SerializeField] private float sensibilityY = 1f;
     [SerializeField] private float maxUpCamera = 90f;
     [SerializeField] private float minDownCamera = -90f;
 

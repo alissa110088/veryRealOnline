@@ -10,6 +10,7 @@ public class Seeker : NetworkBehaviour
     [SerializeField] private Texture darkGreen;
     [SerializeField] private Texture red;
     [SerializeField] private Camera cam;
+    [SerializeField] private GameObject deathParticle;
 
     private LayerMask playerLayer;
     private GameObject focusedObject;
@@ -99,6 +100,7 @@ public class Seeker : NetworkBehaviour
         if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(pTarget, out NetworkObject spawnedObjects))
         {
             PlayerNetwork player = spawnedObjects.GetComponent<PlayerNetwork>();
+            GameObject lParticle = Instantiate(deathParticle, player.gameObject.transform.position, Quaternion.identity);
 
             if (player == null) return;
 
