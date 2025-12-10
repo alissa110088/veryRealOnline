@@ -327,6 +327,10 @@ public class LobbyManager : MonoBehaviour
         UpdateLobbyGameMode("HideAndSeek");
     }
 
+    private void FixedUpdate()
+    {
+        Debug.Log("faut pas laisser son pc allumé");
+    }
     async void UpdateLobbyGameMode(string gameMode)
     {
         try

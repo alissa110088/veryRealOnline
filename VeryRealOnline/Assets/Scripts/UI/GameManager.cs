@@ -15,9 +15,11 @@ public class GameManager : NetworkBehaviour
     private bool startTimer;
     private bool chatAlreadySpawned;
     private string hiderTag = "hider";
+    private int numPlayerLeft = 0;
 
     [SerializeField] private NetworkVariable<float> time = new NetworkVariable<float>(600f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     [SerializeField] private TextMeshProUGUI text;
+    [SerializeField] private TextMeshProUGUI playerLeftText;
     [SerializeField] private GameObject winCanvas;
     [SerializeField] private GameObject seekerWin;
     [SerializeField] private GameObject hiderWin;
@@ -71,13 +73,13 @@ public class GameManager : NetworkBehaviour
     {
         playersAlive.Remove(pNetwork);
         playersDead.Add(pNetwork);
-
+        UpdatePlayerRpc(true);
         foreach (PlayerNetwork lNet in playersAlive)
         {
             if (lNet.gameObject.CompareTag(hiderTag))
                 return;
         }
-
+        
         seekerWinRpc();
     }
     [Rpc(SendTo.Everyone)]
@@ -156,6 +158,7 @@ public class GameManager : NetworkBehaviour
     private void GivePlayerRoleClientRpc(ulong[] playerIds, int howMany)
     {
         int i = 0;
+        numPlayerLeft = 0;
         foreach (ulong clientId in playerIds)
         {
             PlayerNetwork player = playersAlive.Find(p => p.OwnerClientId == clientId);
@@ -164,12 +167,26 @@ public class GameManager : NetworkBehaviour
             if (i < howMany)
                 ActionManager.GivePlayerRole?.Invoke(EnumPlayerState.seeker, player.gameObject, anchorSeeker.transform.position);
             else
+            {
                 ActionManager.GivePlayerRole?.Invoke(EnumPlayerState.hider, player.gameObject, anchorHider.transform.position);
+                numPlayerLeft++;
+            }
 
             i++;
         }
 
+        UpdatePlayerRpc();
         startTimer = true;
+    }
+
+    [Rpc(SendTo.Everyone)]
+    private void UpdatePlayerRpc(bool pRemovePlayer = false)
+    {
+        if (pRemovePlayer)
+        {
+            numPlayerLeft--;
+        }
+        playerLeftText.text = "hider left: " + numPlayerLeft;
     }
 
     private void TimerServer()

@@ -223,7 +223,6 @@ public class PlayerNetwork : NetworkBehaviour
         Debug.Log(shouldJump);
         if (isGrounded && shouldJump)
         {
-            Debug.Log("shouldJump");
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }

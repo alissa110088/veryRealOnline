@@ -227,8 +227,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   ShowTopMostFoldoutHeaderGroup: 1
   camera: {fileID: 8388049688777869280}
-  sensibilityX: 2
-  sensibilityY: 1
+  sensibilityX: 0.2
+  sensibilityY: 0.1
   maxUpCamera: 90
   minDownCamera: -90
 --- !u!114 &2857883058575590491
