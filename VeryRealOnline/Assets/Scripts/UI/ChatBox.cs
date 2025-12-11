@@ -12,7 +12,6 @@ public class ChatBox : NetworkBehaviour
 
     private int index = 0;
     private int numMessageBeforeUp = 6;
-    private float upIndex = 13f;
 
     private InputSystem_Actions inputActions;
     private List<string> messages = new List<string>();

@@ -149,11 +149,6 @@ public class PlayerNetwork : NetworkBehaviour
     {
         yield return null;
         ActionManager.addPlayer?.Invoke(this);
-        if (IsServer)
-        {
-            yield return new WaitForSeconds(waitBegin);
-            ActionManager.activatePlayer.Invoke();
-        }
     }
     private void ChangeFov(float newFov = 100f, float transitionDuration = 0.5f)
     {
@@ -166,10 +161,7 @@ public class PlayerNetwork : NetworkBehaviour
             return;
 
         currentNumPlayer += 1;
-        if (currentNumPlayer == LobbyManager.instance.numPlayer)
-        {
-            ActionManager.activatePlayer.Invoke();
-        }
+        
     }
 
     private void GetDirection(InputAction.CallbackContext ctx)

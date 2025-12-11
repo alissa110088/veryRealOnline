@@ -13,13 +13,10 @@ public class Spectate : NetworkBehaviour
         transform.SetParent(null);
 
         if (IsOwner && playerNetwork.NetworkObject.NetworkObjectId == pTarget && !dead)
-        {
             InitDead(pChange);
-        }
         if (IsServer)
-        {
             DestroyObject();
-        }
+
     }
 
 
@@ -27,7 +24,6 @@ public class Spectate : NetworkBehaviour
     {;
         GameManager.instance.RemovePlayer(playerNetwork);
         Destroy(playerNetwork.gameObject);
-
     }
 
 

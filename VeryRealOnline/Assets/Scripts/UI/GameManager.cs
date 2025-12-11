@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -16,6 +17,7 @@ public class GameManager : NetworkBehaviour
     private bool chatAlreadySpawned;
     private string hiderTag = "hider";
     private int numPlayerLeft = 0;
+    private int currentPlayerConnected = 0;
 
     [SerializeField] private NetworkVariable<float> time = new NetworkVariable<float>(600f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     [SerializeField] private TextMeshProUGUI text;
@@ -31,6 +33,7 @@ public class GameManager : NetworkBehaviour
 
 
     public static GameManager instance;
+
 
     private void Awake()
     {
@@ -49,21 +52,46 @@ public class GameManager : NetworkBehaviour
         if (!startTimer)
             return;
 
-        if(IsServer)
-        TimerServer();
+
+        if (IsServer)
+            TimerServer();
     }
     public override void OnNetworkSpawn()
     {
         ActionManager.addPlayer += AddPlayer;
-        ActionManager.activatePlayer += ActivateAllPlayer;
+        NetworkManager.Singleton.OnClientConnectedCallback += ExecInit;
     }
 
     public void OnDestroy()
     {
         ActionManager.addPlayer -= AddPlayer;
-        ActionManager.activatePlayer -= ActivateAllPlayer;
+        NetworkManager.Singleton.OnClientConnectedCallback -= ExecInit;
     }
 
+    private void ExecInit(ulong pPlayer)
+    {
+        if (IsServer)
+            Init();
+    }
+
+    private void Init()
+    {
+        if (!IsServer)
+            return;
+        currentPlayerConnected += 1;
+        Debug.Log(currentPlayerConnected);
+        Debug.Log(LobbyManager.instance.numPlayer);
+        if (currentPlayerConnected == LobbyManager.instance.numPlayer)
+            StartCoroutine(waitBeforeStart());
+    }
+
+    private IEnumerator waitBeforeStart()
+    {
+        yield return new WaitForSeconds(1);
+
+        Debug.Log("current: " + currentPlayerConnected + "num should be connect: " + LobbyManager.instance.numPlayer);
+        ActivateAllPlayer();
+    }
     private void AddPlayer(PlayerNetwork pNetwork)
     {
         playersAlive.Add(pNetwork);
@@ -79,7 +107,7 @@ public class GameManager : NetworkBehaviour
             if (lNet.gameObject.CompareTag(hiderTag))
                 return;
         }
-        
+
         seekerWinRpc();
     }
     [Rpc(SendTo.Everyone)]
@@ -104,7 +132,6 @@ public class GameManager : NetworkBehaviour
         hideUiRPC();
         for (int i = 0; i < playersAlive.Count; i++)
         {
-            Debug.Log(i);
             playersAlive[i].gameObject.transform.position = new Vector3(i, 0f, 0f);
             playersAlive[i].gameObject.SetActive(true);
         }
@@ -162,7 +189,10 @@ public class GameManager : NetworkBehaviour
         foreach (ulong clientId in playerIds)
         {
             PlayerNetwork player = playersAlive.Find(p => p.OwnerClientId == clientId);
-            if (player == null) continue;
+            if (player == null)
+            {
+                continue;
+            }
 
             if (i < howMany)
                 ActionManager.GivePlayerRole?.Invoke(EnumPlayerState.seeker, player.gameObject, anchorSeeker.transform.position);

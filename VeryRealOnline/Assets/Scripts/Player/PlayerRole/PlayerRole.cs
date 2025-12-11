@@ -16,12 +16,12 @@ public class PlayerRole : NetworkBehaviour
     [SerializeField] private Material redTexture;
     [SerializeField] private Material greenTexture;
 
-    private void OnEnable()
+    public override void OnNetworkSpawn()
     {
         ActionManager.GivePlayerRole += GiveRole;
     }
 
-    private void OnDisable()
+    public override void OnNetworkDespawn()
     {
         ActionManager.GivePlayerRole -= GiveRole;
     }
@@ -36,26 +36,29 @@ public class PlayerRole : NetworkBehaviour
     }
     private void AttributeRole()
     {
-        if(playerRole == EnumPlayerState.seeker)
+        hiderScript.enabled = true;
+
+        if (playerRole == EnumPlayerState.seeker)
         {
-            hiderScript.enabled = true;
             seekerScript.enabled = true;
             gameObject.tag = seekerText;
             meshRenderer.material = redTexture;
 
             if (!IsOwner) return;
+            Debug.Log("ShouldGetRole");
             text.text = seekerText;
             text.color = Color.red;
             transform.position = pos;
         }
-        else if(playerRole == EnumPlayerState.hider)
+        else
         {
-            hiderScript.enabled = true;
             seekerScript.enabled = false;
             gameObject.tag = hiderText;
             meshRenderer.material = greenTexture;
 
             if (!IsOwner) return;
+            Debug.Log("ShouldGetRole");
+
             text.text = hiderText;
             text.color = Color.green;
             transform.position = pos;

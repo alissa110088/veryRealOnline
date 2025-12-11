@@ -271,6 +271,7 @@ public class LobbyManager : MonoBehaviour
                 Player = GetPlayer()
             };
 
+
             Lobby lobby = await LobbyService.Instance.QuickJoinLobbyAsync(quickJoinLobbyOptions);
             joinedLobby = lobby;
 
@@ -282,6 +283,8 @@ public class LobbyManager : MonoBehaviour
             buttonCreate.SetActive(false);
 
             PrintPlayers(lobby);
+            
+
         }
         catch (LobbyServiceException e)
         {
@@ -327,10 +330,6 @@ public class LobbyManager : MonoBehaviour
         UpdateLobbyGameMode("HideAndSeek");
     }
 
-    private void FixedUpdate()
-    {
-        Debug.Log("faut pas laisser son pc allumé");
-    }
     async void UpdateLobbyGameMode(string gameMode)
     {
         try
@@ -447,10 +446,8 @@ public class LobbyManager : MonoBehaviour
         {
             try
             {
-                Debug.Log("Start Game");
-
-                string relayCode = await RelayManager.instance.CreateRelay();
                 numPlayer = PrintPlayers();
+                string relayCode = await RelayManager.instance.CreateRelay();
 
                 Lobby lobby = await LobbyService.Instance.UpdateLobbyAsync(joinedLobby.Id, new UpdateLobbyOptions
                 {
