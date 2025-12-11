@@ -79,8 +79,7 @@ public class GameManager : NetworkBehaviour
         if (!IsServer)
             return;
         currentPlayerConnected += 1;
-        Debug.Log(currentPlayerConnected);
-        Debug.Log(LobbyManager.instance.numPlayer);
+
         if (currentPlayerConnected == LobbyManager.instance.numPlayer)
             StartCoroutine(waitBeforeStart());
     }
@@ -89,7 +88,6 @@ public class GameManager : NetworkBehaviour
     {
         yield return new WaitForSeconds(1);
 
-        Debug.Log("current: " + currentPlayerConnected + "num should be connect: " + LobbyManager.instance.numPlayer);
         ActivateAllPlayer();
     }
     private void AddPlayer(PlayerNetwork pNetwork)

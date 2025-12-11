@@ -45,7 +45,6 @@ public class PlayerRole : NetworkBehaviour
             meshRenderer.material = redTexture;
 
             if (!IsOwner) return;
-            Debug.Log("ShouldGetRole");
             text.text = seekerText;
             text.color = Color.red;
             transform.position = pos;
@@ -57,7 +56,6 @@ public class PlayerRole : NetworkBehaviour
             meshRenderer.material = greenTexture;
 
             if (!IsOwner) return;
-            Debug.Log("ShouldGetRole");
 
             text.text = hiderText;
             text.color = Color.green;

@@ -212,7 +212,6 @@ public class PlayerNetwork : NetworkBehaviour
     {
         if (!IsOwner) return;
 
-        Debug.Log(shouldJump);
         if (isGrounded && shouldJump)
         {
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
